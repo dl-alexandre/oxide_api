@@ -62,6 +62,26 @@ defmodule OxideApi do
   defdelegate request_with_meta(client, method, path, opts \\ []), to: Client
 
   @doc """
+  Makes a request by generated OpenAPI operation ID.
+
+  Use this for schema-covered endpoints that do not yet have a dedicated helper.
+  """
+  @spec request_operation(Client.t(), String.t() | atom(), keyword()) ::
+          {:ok, term()} | {:error, OxideApi.Error.t() | {:transport_error, term()}}
+  defdelegate request_operation(client, operation_id, opts \\ []),
+    to: Operation,
+    as: :request
+
+  @doc """
+  Makes an operation-ID request and returns response metadata.
+  """
+  @spec request_operation_with_meta(Client.t(), String.t() | atom(), keyword()) ::
+          Client.response_result()
+  defdelegate request_operation_with_meta(client, operation_id, opts \\ []),
+    to: Operation,
+    as: :request_with_meta
+
+  @doc """
   Lazily streams items from a paginated list endpoint.
   """
   @spec stream_items(Client.t(), String.t(), keyword() | map()) :: Enumerable.t()

@@ -54,6 +54,75 @@ defmodule OxideApi.OperationTest do
              )
   end
 
+  test "requests an operation by operation id with path and query params", %{
+    bypass: bypass,
+    client: client
+  } do
+    Bypass.expect_once(bypass, "GET", "/v1/instances/web%2Fone", fn conn ->
+      conn = Plug.Conn.fetch_query_params(conn)
+      assert conn.query_params["project"] == "prod"
+
+      json(conn, 200, %{"name" => "web/one"})
+    end)
+
+    assert {:ok, %{"name" => "web/one"}} =
+             Operation.request(client, :instance_view,
+               path_params: [instance: "web/one"],
+               params: [project: "prod"]
+             )
+  end
+
+  test "requests an operation with JSON body metadata", %{bypass: bypass, client: client} do
+    Bypass.expect_once(bypass, "POST", "/v1/timeseries/query", fn conn ->
+      conn = Plug.Conn.fetch_query_params(conn)
+      headers = Map.new(conn.req_headers)
+
+      assert conn.query_params["project"] == "prod"
+      assert headers["content-type"] =~ "application/json"
+
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+      assert Jason.decode!(body) == %{"query" => "get sled_cpu:usage"}
+
+      json(conn, 200, %{"tables" => []})
+    end)
+
+    assert {:ok, %{"tables" => []}} =
+             OxideApi.request_operation(client, :timeseries_query,
+               params: [project: "prod"],
+               request_body: %{"query" => "get sled_cpu:usage"}
+             )
+  end
+
+  test "requests an operation with form body metadata", %{bypass: bypass} do
+    {:ok, client} =
+      Client.new_unauthenticated(
+        host: "http://localhost:#{bypass.port}",
+        req_options: [retry: false]
+      )
+
+    Bypass.expect_once(bypass, "POST", "/device/auth", fn conn ->
+      headers = Map.new(conn.req_headers)
+      refute Map.has_key?(headers, "authorization")
+      assert headers["content-type"] =~ "application/x-www-form-urlencoded"
+
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+      assert URI.decode_query(body) == %{"client_id" => "oxide-cli"}
+
+      json(conn, 200, %{"device_code" => "device-code"})
+    end)
+
+    assert {:ok, %{"device_code" => "device-code"}} =
+             Operation.request(client, :device_auth_request,
+               request_body: [client_id: "oxide-cli"]
+             )
+  end
+
+  test "raises when operation request body is required but missing", %{client: client} do
+    assert_raise ArgumentError, ~r/requires request body/, fn ->
+      Operation.request(client, :timeseries_query, params: [project: "prod"])
+    end
+  end
+
   test "streams a paginated operation by operation id", %{bypass: bypass, client: client} do
     Bypass.expect(bypass, "GET", "/v1/projects", fn conn ->
       conn = Plug.Conn.fetch_query_params(conn)

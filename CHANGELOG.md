@@ -25,11 +25,16 @@ First Hex release candidate for the Oxide control plane API client.
   bundle/probe endpoints.
 - Generated operation metadata for request body schemas, response schemas,
   response statuses, and path/query parameters.
+- Metadata-driven `OxideApi.Operation.request/3` and
+  `OxideApi.request_operation/3` helpers for operation-ID calls across the full
+  endpoint inventory.
 - Schema-derived pagination metadata plus path-based and operation-ID streaming
   helpers.
 - First-class OxQL helpers for project and fleet/system timeseries queries,
   including bang/tagged query variants, direct table/timeseries fetch helpers,
-  result traversal helpers, and an example script.
+  shaped `%OxideApi.Oxql.Table{}`, `%OxideApi.Oxql.Series{}`, and
+  `%OxideApi.Oxql.Point{}` structs, result traversal helpers, and an example
+  script.
 - Plain-map builders for common project, disk, image, instance, VPC, subnet,
   floating IP, network interface, snapshot, and firewall request bodies.
 - `OxideApi.Workflows` helpers for common project, instance, VPC/subnet, and
@@ -55,5 +60,7 @@ First Hex release candidate for the Oxide control plane API client.
 
 - Request and response bodies are plain maps; this release does not generate
   structs or schema-derived Elixir types.
+- Operation-ID requests are intentionally low-level and metadata-driven;
+  handwritten helpers remain the preferred interface for common workflows.
 - Live integration tests run only when `OXIDE_HOST` and `OXIDE_TOKEN` are set.
 - Telemetry hooks are not included in this release.

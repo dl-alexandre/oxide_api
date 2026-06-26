@@ -271,25 +271,58 @@ OxideApi.Operation.query_parameters(:timeseries_query)
 #=> [%{name: "project", in: "query", required: true, schema: "NameOrId"}]
 ```
 
+For endpoint coverage, the library uses two layers. Common resources and
+workflows get handwritten helpers with clearer names and examples. The full
+schema inventory remains reachable through operation IDs for long-tail
+endpoints:
+
+```elixir
+{:ok, instance} =
+  OxideApi.Operation.request(
+    oxide,
+    :instance_view,
+    path_params: [instance: "web"],
+    params: [project: "prod"]
+  )
+```
+
+For body-bearing requests, pass `request_body:` and the generated
+`request_content_type` decides whether the body is sent as JSON, form data, or
+raw bytes:
+
+```elixir
+{:ok, result} =
+  OxideApi.request_operation(
+    oxide,
+    :timeseries_query,
+    params: [project: "prod"],
+    request_body: %{"query" => "get virtual_disk:bytes_read"}
+  )
+```
+
 ## OxQL Timeseries Queries
 
 Oxide timeseries queries are written in OxQL. Use
-`OxideApi.Oxql.fetch_timeseries/3` with `project: "name"` for the common
-project-scoped case:
+`OxideApi.Oxql.fetch_points/3` with `project: "name"` when you want samples
+shaped for LiveView streams, charts, or agent loops:
 
 ```elixir
-{:ok, series} =
-  OxideApi.Oxql.fetch_timeseries(
+{:ok, points} =
+  OxideApi.Oxql.fetch_points(
     oxide,
     "get virtual_disk:bytes_read",
     project: "prod"
   )
 
-Enum.each(series, fn series ->
-  IO.inspect(series["fields"])
-  IO.inspect(series["points"])
+Enum.each(points, fn point ->
+  IO.inspect({point.table, point.fields, point.timestamp, point.value})
 end)
 ```
+
+The shaping layer also exposes `shape/1` and `series/1`, returning
+`%OxideApi.Oxql.Table{}` and `%OxideApi.Oxql.Series{}` structs while preserving
+raw response data on each struct. `fetch_timeseries/3`, `tables/1`, and
+`timeseries/1` remain available when you want the API response maps directly.
 
 Omit `:project` to use the fleet/system-scoped endpoint:
 
@@ -314,7 +347,7 @@ For agent loops, use `tagged_query/3` to combine OxQL with
 ```elixir
 case OxideApi.Oxql.tagged_query(oxide, "get sled_cpu:usage") do
   {:ok, result} ->
-    {:ok, OxideApi.Oxql.timeseries(result)}
+    {:ok, OxideApi.Oxql.points(result)}
 
   {:error, category, error} when category in [:rate_limited, :retryable] ->
     {:retry, error}

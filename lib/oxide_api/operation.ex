@@ -128,6 +128,33 @@ defmodule OxideApi.Operation do
   end
 
   @doc """
+  Calls an operation by generated OpenAPI `operationId`.
+
+  Use this for long-tail endpoints before the library grows a dedicated
+  ergonomic wrapper. Options:
+
+  * `:path_params` - values for `{name}` placeholders in the operation path
+  * `:params` - query parameters
+  * `:request_body` - body encoded from generated request content-type metadata
+  * `:json`, `:form`, `:body` - explicit low-level request body options
+  * `:headers` - extra request headers
+  * `:req_options` - per-request options merged into `Req`
+  """
+  @spec request(Client.t(), String.t() | atom(), keyword()) :: Client.result()
+  def request(%Client{} = client, operation_id, opts \\ []) when is_list(opts) do
+    operation_request(client, operation_id, opts, &Client.request/4)
+  end
+
+  @doc """
+  Calls an operation by `operationId` and returns response metadata.
+  """
+  @spec request_with_meta(Client.t(), String.t() | atom(), keyword()) ::
+          Client.response_result()
+  def request_with_meta(%Client{} = client, operation_id, opts \\ []) when is_list(opts) do
+    operation_request(client, operation_id, opts, &Client.request_with_meta/4)
+  end
+
+  @doc """
   Streams items for a paginated operation ID or raw path.
 
   When passing an operation ID with path placeholders, provide replacements in
@@ -227,6 +254,106 @@ defmodule OxideApi.Operation do
     operation_or_id
     |> parameters()
     |> Enum.filter(&(&1.in == location))
+  end
+
+  defp operation_request(client, operation_id, opts, request_fun) do
+    operation = fetch!(operation_id)
+    path_params = Keyword.get(opts, :path_params, [])
+
+    request_fun.(
+      client,
+      method_atom(operation),
+      render_path(operation.path, path_params),
+      request_opts(operation, opts)
+    )
+  end
+
+  defp request_opts(operation, opts) do
+    {body_opts, content_type} = body_opts(operation, opts)
+
+    []
+    |> put_if_present(:params, Keyword.get(opts, :params))
+    |> put_if_present(:headers, headers(opts, content_type))
+    |> put_if_present(:req_options, Keyword.get(opts, :req_options))
+    |> Keyword.merge(body_opts)
+  end
+
+  defp body_opts(operation, opts) do
+    cond do
+      Keyword.has_key?(opts, :json) ->
+        {[json: Keyword.fetch!(opts, :json)], nil}
+
+      Keyword.has_key?(opts, :form) ->
+        {[form: Keyword.fetch!(opts, :form)], nil}
+
+      Keyword.has_key?(opts, :body) ->
+        {[body: Keyword.fetch!(opts, :body)], operation.request_content_type}
+
+      Keyword.has_key?(opts, :request_body) ->
+        request_body_opts(operation, Keyword.fetch!(opts, :request_body))
+
+      operation.request_body_required ->
+        raise ArgumentError,
+              "operation #{inspect(operation.operation_id)} requires request body " <>
+                "(#{String.upcase(operation.method)} #{operation.path})"
+
+      true ->
+        {[], nil}
+    end
+  end
+
+  defp request_body_opts(%{request_content_type: "application/json"}, body),
+    do: {[json: body], nil}
+
+  defp request_body_opts(%{request_content_type: "application/x-www-form-urlencoded"}, body),
+    do: {[form: body], nil}
+
+  defp request_body_opts(%{request_content_type: nil} = operation, _body) do
+    raise ArgumentError,
+          "operation #{inspect(operation.operation_id)} does not accept a request body " <>
+            "(#{String.upcase(operation.method)} #{operation.path})"
+  end
+
+  defp request_body_opts(%{request_content_type: content_type}, body),
+    do: {[body: body], content_type}
+
+  defp headers(opts, content_type) do
+    opts
+    |> Keyword.get(:headers, [])
+    |> maybe_put_content_type(content_type)
+  end
+
+  defp maybe_put_content_type(headers, nil), do: headers
+
+  defp maybe_put_content_type(headers, content_type) do
+    if Enum.any?(headers, &content_type_header?/1) do
+      headers
+    else
+      [{"content-type", content_type} | headers]
+    end
+  end
+
+  defp content_type_header?({key, _value}) do
+    key
+    |> to_string()
+    |> String.downcase()
+    |> Kernel.==("content-type")
+  end
+
+  defp put_if_present(opts, _key, nil), do: opts
+  defp put_if_present(opts, _key, []), do: opts
+  defp put_if_present(opts, key, value), do: Keyword.put(opts, key, value)
+
+  defp method_atom(%{method: "delete"}), do: :delete
+  defp method_atom(%{method: "get"}), do: :get
+  defp method_atom(%{method: "patch"}), do: :patch
+  defp method_atom(%{method: "post"}), do: :post
+  defp method_atom(%{method: "put"}), do: :put
+
+  defp method_atom(operation) do
+    raise ArgumentError,
+          "operation #{inspect(operation.operation_id)} has unsupported HTTP method " <>
+            inspect(operation.method)
   end
 
   defp fetch_path_param!(path_params, key) do

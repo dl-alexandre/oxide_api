@@ -18,10 +18,12 @@ opts =
 case OxideApi.Oxql.tagged_query(oxide, query, opts) do
   {:ok, result} ->
     result
-    |> OxideApi.Oxql.tables()
-    |> Enum.each(fn table ->
-      count = table |> Map.get("timeseries", []) |> length()
-      IO.puts("#{table["name"]}: #{count} timeseries")
+    |> OxideApi.Oxql.points()
+    |> Enum.each(fn point ->
+      IO.puts(
+        "#{point.table} #{point.timestamp} #{inspect(point.fields)} " <>
+          "#{point.value_type}/#{point.metric_type}=#{inspect(point.value)}"
+      )
     end)
 
   {:error, category, %OxideApi.Error{} = error} when category in [:rate_limited, :retryable] ->

@@ -31,10 +31,13 @@ defmodule OxideApi.Client do
     :config_dir,
     :connect_options,
     :host,
+    :max_retries,
     :pool_timeout,
     :receive_timeout,
     :req_options,
     :retry,
+    :retry_delay,
+    :retry_log_level,
     :token,
     :user_agent
   ]

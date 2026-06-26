@@ -1,5 +1,7 @@
 # OxideApi
 
+[![CI](https://github.com/dl-alexandre/oxide_api/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/dl-alexandre/oxide_api/actions/workflows/ci.yml)
+
 Elixir client for the [Oxide control plane API](https://docs.oxide.computer/api/guides/introduction).
 
 This library currently targets Oxide API schema version `2026060800.0.0` and
@@ -144,6 +146,25 @@ Create a project:
   })
 ```
 
+Update a project:
+
+```elixir
+{:ok, project} =
+  OxideApi.update_project(oxide, "demo", %{
+    "name" => "demo",
+    "description" => "Updated demo project"
+  })
+```
+
+Delete a project:
+
+```elixir
+{:ok, nil} = OxideApi.delete_project(oxide, "demo")
+```
+
+Delete endpoints that return HTTP 204 or 205 normalize the response body to
+`nil`.
+
 Create a blank disk in a project:
 
 ```elixir
@@ -283,8 +304,18 @@ Create an image from a snapshot:
   )
 ```
 
-The workflow helpers are thin composition functions. You can use the underlying
-builders directly when you need to control the request body yourself:
+Workflow helpers are thin sequential composition functions, not transactions.
+They stop at the first `{:error, reason}` and return that error without
+attempting rollback. The `ensure_*` helpers first try to fetch existing
+resources and create only when Oxide reports not-found, so they are safe to
+rerun after a partial failure. `ensure_vpc_and_subnet/4`, for example, can
+leave a newly-created VPC behind if subnet creation fails; rerunning the helper
+will reuse that VPC and try the subnet again. Helpers that map to one Oxide API
+call, such as `create_instance_with_disk/4` and `create_image_from_snapshot/5`,
+leave cleanup semantics to the API.
+
+You can use the underlying builders directly when you need to control the
+request body yourself:
 
 ```elixir
 boot = OxideApi.Builders.create_disk_attachment("boot", 21_474_836_480)
@@ -363,6 +394,41 @@ case OxideApi.Instances.start(oxide, "web", project: "prod") do
     end
 end
 ```
+
+For automatic retries, configure the underlying `Req` retry step when building
+the client. `retryable?/1` works on normalized `%OxideApi.Error{}` structs after
+the client receives an HTTP response, while `Req` retry callbacks see raw
+`%Req.Response{}` and transport exception structs before the response is
+normalized:
+
+```elixir
+retry = fn
+  _request, %Req.Response{} = response ->
+    %{status: status, body: body, headers: headers} = Req.Response.to_map(response)
+
+    status
+    |> OxideApi.Error.from_http(body, headers)
+    |> OxideApi.Error.retryable?()
+
+  _request, %Req.TransportError{} ->
+    true
+
+  _request, _other ->
+    false
+end
+
+{:ok, oxide} =
+  OxideApi.new(
+    retry: retry,
+    max_retries: 4,
+    retry_delay: fn attempt -> trunc(:math.pow(2, attempt) * 500) end,
+    retry_log_level: :info
+  )
+```
+
+For rate limits, leaving `retry_delay` unset allows `Req` to honor
+`retry-after` on 429/503 responses when Oxide sends it. Set `retry_delay` when
+you want your own backoff or jitter policy.
 
 For structured logs, use `to_log_metadata/1`:
 

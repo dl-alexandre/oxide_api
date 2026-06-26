@@ -8,9 +8,12 @@ defmodule OxideApi.Config do
 
   @request_option_keys [
     :connect_options,
+    :max_retries,
     :pool_timeout,
     :receive_timeout,
-    :retry
+    :retry,
+    :retry_delay,
+    :retry_log_level
   ]
 
   defstruct [

@@ -251,20 +251,46 @@ defmodule OxideApi.ClientTest do
   end
 
   test "exposes timeout and retry options on the client" do
+    retry_delay = fn retry_count -> retry_count * 500 end
+
     assert {:ok, %Client{req_options: req_options}} =
              Client.new(
                host: "https://rack.example.com",
                token: "oxide-token",
                retry: false,
+               retry_delay: retry_delay,
+               retry_log_level: :info,
+               max_retries: 2,
                receive_timeout: 2_000,
                pool_timeout: 1_000,
                connect_options: [timeout: 500]
              )
 
     assert req_options[:retry] == false
+    assert req_options[:retry_delay] == retry_delay
+    assert req_options[:retry_log_level] == :info
+    assert req_options[:max_retries] == 2
     assert req_options[:receive_timeout] == 2_000
     assert req_options[:pool_timeout] == 1_000
     assert req_options[:connect_options] == [timeout: 500]
+  end
+
+  test "splits retry options from resource query parameters" do
+    retry_delay = fn retry_count -> retry_count * 500 end
+
+    assert {config_opts, query_opts} =
+             Client.split_resource_opts(
+               limit: 100,
+               project: "prod",
+               retry_delay: retry_delay,
+               retry_log_level: :info,
+               max_retries: 2
+             )
+
+    assert config_opts[:retry_delay] == retry_delay
+    assert config_opts[:retry_log_level] == :info
+    assert config_opts[:max_retries] == 2
+    assert query_opts == [limit: 100, project: "prod"]
   end
 
   test "streams paginated items lazily", %{bypass: bypass, client: client} do

@@ -1,0 +1,3063 @@
+{
+  "version": "2026060800.0.0",
+  "source": "priv/oxide_api/openapi/2026060800.0.0.json",
+  "paths": [
+    "/device/auth",
+    "/device/confirm",
+    "/device/token",
+    "/experimental/v1/probes",
+    "/experimental/v1/probes/{probe}",
+    "/experimental/v1/system/support-bundles",
+    "/experimental/v1/system/support-bundles/{bundle_id}",
+    "/experimental/v1/system/support-bundles/{bundle_id}/download",
+    "/experimental/v1/system/support-bundles/{bundle_id}/download/{file}",
+    "/experimental/v1/system/support-bundles/{bundle_id}/index",
+    "/login/{silo_name}/saml/{provider_name}",
+    "/v1/affinity-groups",
+    "/v1/affinity-groups/{affinity_group}",
+    "/v1/affinity-groups/{affinity_group}/members",
+    "/v1/affinity-groups/{affinity_group}/members/instance/{instance}",
+    "/v1/alert-classes",
+    "/v1/alert-receivers",
+    "/v1/alert-receivers/{receiver}",
+    "/v1/alert-receivers/{receiver}/deliveries",
+    "/v1/alert-receivers/{receiver}/probe",
+    "/v1/alert-receivers/{receiver}/subscriptions",
+    "/v1/alert-receivers/{receiver}/subscriptions/{subscription}",
+    "/v1/alerts/{alert_id}/resend",
+    "/v1/anti-affinity-groups",
+    "/v1/anti-affinity-groups/{anti_affinity_group}",
+    "/v1/anti-affinity-groups/{anti_affinity_group}/members",
+    "/v1/anti-affinity-groups/{anti_affinity_group}/members/instance/{instance}",
+    "/v1/auth-settings",
+    "/v1/certificates",
+    "/v1/certificates/{certificate}",
+    "/v1/disks",
+    "/v1/disks/{disk}",
+    "/v1/disks/{disk}/bulk-write",
+    "/v1/disks/{disk}/bulk-write-start",
+    "/v1/disks/{disk}/bulk-write-stop",
+    "/v1/disks/{disk}/finalize",
+    "/v1/external-subnets",
+    "/v1/external-subnets/{external_subnet}",
+    "/v1/external-subnets/{external_subnet}/attach",
+    "/v1/external-subnets/{external_subnet}/detach",
+    "/v1/floating-ips",
+    "/v1/floating-ips/{floating_ip}",
+    "/v1/floating-ips/{floating_ip}/attach",
+    "/v1/floating-ips/{floating_ip}/detach",
+    "/v1/groups",
+    "/v1/groups/{group_id}",
+    "/v1/images",
+    "/v1/images/{image}",
+    "/v1/images/{image}/demote",
+    "/v1/images/{image}/promote",
+    "/v1/instances",
+    "/v1/instances/{instance}",
+    "/v1/instances/{instance}/affinity-groups",
+    "/v1/instances/{instance}/anti-affinity-groups",
+    "/v1/instances/{instance}/disks",
+    "/v1/instances/{instance}/disks/attach",
+    "/v1/instances/{instance}/disks/detach",
+    "/v1/instances/{instance}/external-ips",
+    "/v1/instances/{instance}/external-ips/ephemeral",
+    "/v1/instances/{instance}/external-subnets",
+    "/v1/instances/{instance}/multicast-groups",
+    "/v1/instances/{instance}/multicast-groups/{multicast_group}",
+    "/v1/instances/{instance}/reboot",
+    "/v1/instances/{instance}/serial-console",
+    "/v1/instances/{instance}/serial-console/stream",
+    "/v1/instances/{instance}/ssh-public-keys",
+    "/v1/instances/{instance}/start",
+    "/v1/instances/{instance}/stop",
+    "/v1/internet-gateway-ip-addresses",
+    "/v1/internet-gateway-ip-addresses/{address}",
+    "/v1/internet-gateway-ip-pools",
+    "/v1/internet-gateway-ip-pools/{pool}",
+    "/v1/internet-gateways",
+    "/v1/internet-gateways/{gateway}",
+    "/v1/ip-pools",
+    "/v1/ip-pools/{pool}",
+    "/v1/login/{silo_name}/local",
+    "/v1/logout",
+    "/v1/me",
+    "/v1/me/access-tokens",
+    "/v1/me/access-tokens/{token_id}",
+    "/v1/me/groups",
+    "/v1/me/ssh-keys",
+    "/v1/me/ssh-keys/{ssh_key}",
+    "/v1/metrics/{metric_name}",
+    "/v1/multicast-groups",
+    "/v1/multicast-groups/{multicast_group}",
+    "/v1/multicast-groups/{multicast_group}/members",
+    "/v1/network-interfaces",
+    "/v1/network-interfaces/{interface}",
+    "/v1/ping",
+    "/v1/policy",
+    "/v1/projects",
+    "/v1/projects/{project}",
+    "/v1/projects/{project}/policy",
+    "/v1/snapshots",
+    "/v1/snapshots/{snapshot}",
+    "/v1/subnet-pools",
+    "/v1/subnet-pools/{pool}",
+    "/v1/system/audit-log",
+    "/v1/system/hardware/disk-adoption-request",
+    "/v1/system/hardware/disk-adoption-request/{physical_disk_adoption_req_id}",
+    "/v1/system/hardware/disk-adoption-requests",
+    "/v1/system/hardware/disks",
+    "/v1/system/hardware/disks-unadopted",
+    "/v1/system/hardware/disks/{disk_id}",
+    "/v1/system/hardware/rack-switch-port/{rack_id}/{switch_slot}/{port}/lldp/neighbors",
+    "/v1/system/hardware/racks",
+    "/v1/system/hardware/racks/{rack_id}",
+    "/v1/system/hardware/racks/{rack_id}/membership",
+    "/v1/system/hardware/racks/{rack_id}/membership/abort",
+    "/v1/system/hardware/racks/{rack_id}/membership/add",
+    "/v1/system/hardware/sleds",
+    "/v1/system/hardware/sleds-uninitialized",
+    "/v1/system/hardware/sleds/{sled_id}",
+    "/v1/system/hardware/sleds/{sled_id}/disks",
+    "/v1/system/hardware/sleds/{sled_id}/instances",
+    "/v1/system/hardware/sleds/{sled_id}/provision-policy",
+    "/v1/system/hardware/switch-port",
+    "/v1/system/hardware/switch-port/{port}/lldp/config",
+    "/v1/system/hardware/switch-port/{port}/settings",
+    "/v1/system/hardware/switch-port/{port}/status",
+    "/v1/system/hardware/switches",
+    "/v1/system/hardware/switches/{switch_id}",
+    "/v1/system/identity-providers",
+    "/v1/system/identity-providers/local/users",
+    "/v1/system/identity-providers/local/users/{user_id}",
+    "/v1/system/identity-providers/local/users/{user_id}/set-password",
+    "/v1/system/identity-providers/saml",
+    "/v1/system/identity-providers/saml/{provider}",
+    "/v1/system/ip-pools",
+    "/v1/system/ip-pools-service",
+    "/v1/system/ip-pools-service/ranges",
+    "/v1/system/ip-pools-service/ranges/add",
+    "/v1/system/ip-pools-service/ranges/remove",
+    "/v1/system/ip-pools/{pool}",
+    "/v1/system/ip-pools/{pool}/ranges",
+    "/v1/system/ip-pools/{pool}/ranges/add",
+    "/v1/system/ip-pools/{pool}/ranges/remove",
+    "/v1/system/ip-pools/{pool}/silos",
+    "/v1/system/ip-pools/{pool}/silos/{silo}",
+    "/v1/system/ip-pools/{pool}/utilization",
+    "/v1/system/metrics/{metric_name}",
+    "/v1/system/networking/address-lot",
+    "/v1/system/networking/address-lot/{address_lot}",
+    "/v1/system/networking/address-lot/{address_lot}/blocks",
+    "/v1/system/networking/allow-list",
+    "/v1/system/networking/bfd-disable",
+    "/v1/system/networking/bfd-enable",
+    "/v1/system/networking/bfd-status",
+    "/v1/system/networking/bgp",
+    "/v1/system/networking/bgp-announce-set",
+    "/v1/system/networking/bgp-announce-set/{announce_set}",
+    "/v1/system/networking/bgp-announce-set/{announce_set}/announcement",
+    "/v1/system/networking/bgp-exported",
+    "/v1/system/networking/bgp-imported",
+    "/v1/system/networking/bgp-message-history",
+    "/v1/system/networking/bgp-status",
+    "/v1/system/networking/inbound-icmp",
+    "/v1/system/networking/loopback-address",
+    "/v1/system/networking/loopback-address/{rack_id}/{switch_slot}/{address}/{subnet_mask}",
+    "/v1/system/networking/settings",
+    "/v1/system/networking/switch-port-settings",
+    "/v1/system/networking/switch-port-settings/{port}",
+    "/v1/system/policy",
+    "/v1/system/scim/tokens",
+    "/v1/system/scim/tokens/{token_id}",
+    "/v1/system/silo-quotas",
+    "/v1/system/silos",
+    "/v1/system/silos/{silo}",
+    "/v1/system/silos/{silo}/ip-pools",
+    "/v1/system/silos/{silo}/policy",
+    "/v1/system/silos/{silo}/quotas",
+    "/v1/system/silos/{silo}/subnet-pools",
+    "/v1/system/subnet-pools",
+    "/v1/system/subnet-pools/{pool}",
+    "/v1/system/subnet-pools/{pool}/members",
+    "/v1/system/subnet-pools/{pool}/members/add",
+    "/v1/system/subnet-pools/{pool}/members/remove",
+    "/v1/system/subnet-pools/{pool}/silos",
+    "/v1/system/subnet-pools/{pool}/silos/{silo}",
+    "/v1/system/subnet-pools/{pool}/utilization",
+    "/v1/system/timeseries/query",
+    "/v1/system/timeseries/schemas",
+    "/v1/system/update/recovery-finish",
+    "/v1/system/update/repositories",
+    "/v1/system/update/repositories/{system_version}",
+    "/v1/system/update/status",
+    "/v1/system/update/target-release",
+    "/v1/system/update/trust-roots",
+    "/v1/system/update/trust-roots/{trust_root_id}",
+    "/v1/system/users",
+    "/v1/system/users-builtin",
+    "/v1/system/users-builtin/{user}",
+    "/v1/system/users/{user_id}",
+    "/v1/system/utilization/silos",
+    "/v1/system/utilization/silos/{silo}",
+    "/v1/timeseries/query",
+    "/v1/users",
+    "/v1/users/{user_id}",
+    "/v1/users/{user_id}/access-tokens",
+    "/v1/users/{user_id}/logout",
+    "/v1/users/{user_id}/sessions",
+    "/v1/utilization",
+    "/v1/vpc-firewall-rules",
+    "/v1/vpc-router-routes",
+    "/v1/vpc-router-routes/{route}",
+    "/v1/vpc-routers",
+    "/v1/vpc-routers/{router}",
+    "/v1/vpc-subnets",
+    "/v1/vpc-subnets/{subnet}",
+    "/v1/vpc-subnets/{subnet}/network-interfaces",
+    "/v1/vpcs",
+    "/v1/vpcs/{vpc}",
+    "/v1/webhook-receivers",
+    "/v1/webhook-receivers/{receiver}",
+    "/v1/webhook-secrets",
+    "/v1/webhook-secrets/{secret_id}"
+  ],
+  "source_type": "vendored_openapi",
+  "operations": [
+    {
+      "path": "/experimental/v1/probes/{probe}",
+      "operation_id": "probe_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete instrumentation probe"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}",
+      "operation_id": "support_bundle_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete support bundle"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}",
+      "operation_id": "affinity_group_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete affinity group"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}/members/instance/{instance}",
+      "operation_id": "affinity_group_member_instance_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove member from affinity group"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}",
+      "operation_id": "alert_receiver_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete alert receiver"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}/subscriptions/{subscription}",
+      "operation_id": "alert_receiver_subscription_remove",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove alert receiver subscription"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}",
+      "operation_id": "anti_affinity_group_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete anti-affinity group"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}/members/instance/{instance}",
+      "operation_id": "anti_affinity_group_member_instance_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove member from anti-affinity group"
+    },
+    {
+      "path": "/v1/certificates/{certificate}",
+      "operation_id": "certificate_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete certificate"
+    },
+    {
+      "path": "/v1/disks/{disk}",
+      "operation_id": "disk_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete disk"
+    },
+    {
+      "path": "/v1/external-subnets/{external_subnet}",
+      "operation_id": "external_subnet_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete external subnet"
+    },
+    {
+      "path": "/v1/floating-ips/{floating_ip}",
+      "operation_id": "floating_ip_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete floating IP"
+    },
+    {
+      "path": "/v1/images/{image}",
+      "operation_id": "image_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete image"
+    },
+    {
+      "path": "/v1/instances/{instance}",
+      "operation_id": "instance_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/external-ips/ephemeral",
+      "operation_id": "instance_ephemeral_ip_detach",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach and deallocate ephemeral IP from instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/multicast-groups/{multicast_group}",
+      "operation_id": "instance_multicast_group_leave",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Leave multicast group by name, IP address, or UUID"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-addresses/{address}",
+      "operation_id": "internet_gateway_ip_address_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach IP address from internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-pools/{pool}",
+      "operation_id": "internet_gateway_ip_pool_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach IP pool from internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateways/{gateway}",
+      "operation_id": "internet_gateway_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete internet gateway"
+    },
+    {
+      "path": "/v1/me/access-tokens/{token_id}",
+      "operation_id": "current_user_access_token_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete access token"
+    },
+    {
+      "path": "/v1/me/ssh-keys/{ssh_key}",
+      "operation_id": "current_user_ssh_key_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete SSH public key"
+    },
+    {
+      "path": "/v1/network-interfaces/{interface}",
+      "operation_id": "instance_network_interface_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete network interface"
+    },
+    {
+      "path": "/v1/projects/{project}",
+      "operation_id": "project_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete project"
+    },
+    {
+      "path": "/v1/snapshots/{snapshot}",
+      "operation_id": "snapshot_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete snapshot"
+    },
+    {
+      "path": "/v1/system/hardware/disk-adoption-request/{physical_disk_adoption_req_id}",
+      "operation_id": "physical_disk_disable_adoption",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Disable adoption of a physical disk for general use"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port/{port}/settings",
+      "operation_id": "networking_switch_port_clear_settings",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Clear switch port settings"
+    },
+    {
+      "path": "/v1/system/identity-providers/local/users/{user_id}",
+      "operation_id": "local_idp_user_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete user"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}",
+      "operation_id": "system_ip_pool_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/silos/{silo}",
+      "operation_id": "system_ip_pool_silo_unlink",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Unlink IP pool from silo"
+    },
+    {
+      "path": "/v1/system/networking/address-lot/{address_lot}",
+      "operation_id": "networking_address_lot_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete address lot"
+    },
+    {
+      "path": "/v1/system/networking/bgp",
+      "operation_id": "networking_bgp_config_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete BGP configuration"
+    },
+    {
+      "path": "/v1/system/networking/bgp-announce-set/{announce_set}",
+      "operation_id": "networking_bgp_announce_set_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete BGP announce set"
+    },
+    {
+      "path": "/v1/system/networking/loopback-address/{rack_id}/{switch_slot}/{address}/{subnet_mask}",
+      "operation_id": "networking_loopback_address_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete loopback address"
+    },
+    {
+      "path": "/v1/system/networking/switch-port-settings",
+      "operation_id": "networking_switch_port_settings_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete switch port settings"
+    },
+    {
+      "path": "/v1/system/scim/tokens/{token_id}",
+      "operation_id": "scim_token_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete SCIM token"
+    },
+    {
+      "path": "/v1/system/silos/{silo}",
+      "operation_id": "silo_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete silo"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}",
+      "operation_id": "system_subnet_pool_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/silos/{silo}",
+      "operation_id": "system_subnet_pool_silo_unlink",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Unlink subnet pool from silo"
+    },
+    {
+      "path": "/v1/system/update/trust-roots/{trust_root_id}",
+      "operation_id": "system_update_trust_root_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete trusted root role"
+    },
+    {
+      "path": "/v1/vpc-router-routes/{route}",
+      "operation_id": "vpc_router_route_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete route"
+    },
+    {
+      "path": "/v1/vpc-routers/{router}",
+      "operation_id": "vpc_router_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete router"
+    },
+    {
+      "path": "/v1/vpc-subnets/{subnet}",
+      "operation_id": "vpc_subnet_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete subnet"
+    },
+    {
+      "path": "/v1/vpcs/{vpc}",
+      "operation_id": "vpc_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Delete VPC"
+    },
+    {
+      "path": "/v1/webhook-secrets/{secret_id}",
+      "operation_id": "webhook_secrets_delete",
+      "method": "delete",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove secret from webhook receiver"
+    },
+    {
+      "path": "/experimental/v1/probes",
+      "operation_id": "probe_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "ProbeInfo",
+      "response_schema": "ProbeInfoResultsPage",
+      "summary": "List instrumentation probes"
+    },
+    {
+      "path": "/experimental/v1/probes/{probe}",
+      "operation_id": "probe_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ProbeInfo",
+      "summary": "View instrumentation probe"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles",
+      "operation_id": "support_bundle_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SupportBundleInfo",
+      "response_schema": "SupportBundleInfoResultsPage",
+      "summary": "List all support bundles"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}",
+      "operation_id": "support_bundle_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SupportBundleInfo",
+      "summary": "View support bundle"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}/download",
+      "operation_id": "support_bundle_download",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Download support bundle contents"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}/download/{file}",
+      "operation_id": "support_bundle_download_file",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Download file from support bundle"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}/index",
+      "operation_id": "support_bundle_index",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Download support bundle index"
+    },
+    {
+      "path": "/v1/affinity-groups",
+      "operation_id": "affinity_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AffinityGroup",
+      "response_schema": "AffinityGroupResultsPage",
+      "summary": "List affinity groups"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}",
+      "operation_id": "affinity_group_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AffinityGroup",
+      "summary": "Fetch affinity group"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}/members",
+      "operation_id": "affinity_group_member_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AffinityGroupMember",
+      "response_schema": "AffinityGroupMemberResultsPage",
+      "summary": "List affinity group members"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}/members/instance/{instance}",
+      "operation_id": "affinity_group_member_instance_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AffinityGroupMember",
+      "summary": "Fetch affinity group member"
+    },
+    {
+      "path": "/v1/alert-classes",
+      "operation_id": "alert_class_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AlertClass",
+      "response_schema": "AlertClassResultsPage",
+      "summary": "List alert classes"
+    },
+    {
+      "path": "/v1/alert-receivers",
+      "operation_id": "alert_receiver_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AlertReceiver",
+      "response_schema": "AlertReceiverResultsPage",
+      "summary": "List alert receivers"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}",
+      "operation_id": "alert_receiver_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AlertReceiver",
+      "summary": "Fetch alert receiver"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}/deliveries",
+      "operation_id": "alert_delivery_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AlertDelivery",
+      "response_schema": "AlertDeliveryResultsPage",
+      "summary": "List delivery attempts to alert receiver"
+    },
+    {
+      "path": "/v1/anti-affinity-groups",
+      "operation_id": "anti_affinity_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AntiAffinityGroup",
+      "response_schema": "AntiAffinityGroupResultsPage",
+      "summary": "List anti-affinity groups"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}",
+      "operation_id": "anti_affinity_group_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AntiAffinityGroup",
+      "summary": "Fetch anti-affinity group"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}/members",
+      "operation_id": "anti_affinity_group_member_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AntiAffinityGroupMember",
+      "response_schema": "AntiAffinityGroupMemberResultsPage",
+      "summary": "List anti-affinity group members"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}/members/instance/{instance}",
+      "operation_id": "anti_affinity_group_member_instance_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AntiAffinityGroupMember",
+      "summary": "Fetch anti-affinity group member"
+    },
+    {
+      "path": "/v1/auth-settings",
+      "operation_id": "auth_settings_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloAuthSettings",
+      "summary": "Fetch current silo's auth settings"
+    },
+    {
+      "path": "/v1/certificates",
+      "operation_id": "certificate_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Certificate",
+      "response_schema": "CertificateResultsPage",
+      "summary": "List certificates for external endpoints"
+    },
+    {
+      "path": "/v1/certificates/{certificate}",
+      "operation_id": "certificate_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Certificate",
+      "summary": "Fetch certificate"
+    },
+    {
+      "path": "/v1/disks",
+      "operation_id": "disk_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Disk",
+      "response_schema": "DiskResultsPage",
+      "summary": "List disks"
+    },
+    {
+      "path": "/v1/disks/{disk}",
+      "operation_id": "disk_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Disk",
+      "summary": "Fetch disk"
+    },
+    {
+      "path": "/v1/external-subnets",
+      "operation_id": "external_subnet_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "ExternalSubnet",
+      "response_schema": "ExternalSubnetResultsPage",
+      "summary": "List external subnets"
+    },
+    {
+      "path": "/v1/external-subnets/{external_subnet}",
+      "operation_id": "external_subnet_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ExternalSubnet",
+      "summary": "Fetch external subnet"
+    },
+    {
+      "path": "/v1/floating-ips",
+      "operation_id": "floating_ip_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "FloatingIp",
+      "response_schema": "FloatingIpResultsPage",
+      "summary": "List floating IPs"
+    },
+    {
+      "path": "/v1/floating-ips/{floating_ip}",
+      "operation_id": "floating_ip_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "FloatingIp",
+      "summary": "Fetch floating IP"
+    },
+    {
+      "path": "/v1/groups",
+      "operation_id": "group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Group",
+      "response_schema": "GroupResultsPage",
+      "summary": "List groups"
+    },
+    {
+      "path": "/v1/groups/{group_id}",
+      "operation_id": "group_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Group",
+      "summary": "Fetch group"
+    },
+    {
+      "path": "/v1/images",
+      "operation_id": "image_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Image",
+      "response_schema": "ImageResultsPage",
+      "summary": "List images"
+    },
+    {
+      "path": "/v1/images/{image}",
+      "operation_id": "image_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Image",
+      "summary": "Fetch image"
+    },
+    {
+      "path": "/v1/instances",
+      "operation_id": "instance_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Instance",
+      "response_schema": "InstanceResultsPage",
+      "summary": "List instances"
+    },
+    {
+      "path": "/v1/instances/{instance}",
+      "operation_id": "instance_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Instance",
+      "summary": "Fetch instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/affinity-groups",
+      "operation_id": "instance_affinity_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AffinityGroup",
+      "response_schema": "AffinityGroupResultsPage",
+      "summary": "List affinity groups containing instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/anti-affinity-groups",
+      "operation_id": "instance_anti_affinity_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AntiAffinityGroup",
+      "response_schema": "AntiAffinityGroupResultsPage",
+      "summary": "List anti-affinity groups containing instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/disks",
+      "operation_id": "instance_disk_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Disk",
+      "response_schema": "DiskResultsPage",
+      "summary": "List disks for instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/external-ips",
+      "operation_id": "instance_external_ip_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "ExternalIp",
+      "response_schema": "ExternalIpResultsPage",
+      "summary": "List external IP addresses"
+    },
+    {
+      "path": "/v1/instances/{instance}/external-subnets",
+      "operation_id": "instance_external_subnet_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "ExternalSubnet",
+      "response_schema": "ExternalSubnetResultsPage",
+      "summary": "List external subnets attached to instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/multicast-groups",
+      "operation_id": "instance_multicast_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "MulticastGroupMember",
+      "response_schema": "MulticastGroupMemberResultsPage",
+      "summary": "List multicast groups for an instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/serial-console",
+      "operation_id": "instance_serial_console",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "InstanceSerialConsoleData",
+      "summary": "Fetch instance serial console"
+    },
+    {
+      "path": "/v1/instances/{instance}/serial-console/stream",
+      "operation_id": "instance_serial_console_stream",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Stream instance serial console"
+    },
+    {
+      "path": "/v1/instances/{instance}/ssh-public-keys",
+      "operation_id": "instance_ssh_public_key_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SshKey",
+      "response_schema": "SshKeyResultsPage",
+      "summary": "List SSH public keys for instance"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-addresses",
+      "operation_id": "internet_gateway_ip_address_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "InternetGatewayIpAddress",
+      "response_schema": "InternetGatewayIpAddressResultsPage",
+      "summary": "List IP addresses attached to internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-pools",
+      "operation_id": "internet_gateway_ip_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "InternetGatewayIpPool",
+      "response_schema": "InternetGatewayIpPoolResultsPage",
+      "summary": "List IP pools attached to internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateways",
+      "operation_id": "internet_gateway_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "InternetGateway",
+      "response_schema": "InternetGatewayResultsPage",
+      "summary": "List internet gateways"
+    },
+    {
+      "path": "/v1/internet-gateways/{gateway}",
+      "operation_id": "internet_gateway_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "InternetGateway",
+      "summary": "Fetch internet gateway"
+    },
+    {
+      "path": "/v1/ip-pools",
+      "operation_id": "ip_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloIpPool",
+      "response_schema": "SiloIpPoolResultsPage",
+      "summary": "List IP pools"
+    },
+    {
+      "path": "/v1/ip-pools/{pool}",
+      "operation_id": "ip_pool_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloIpPool",
+      "summary": "Fetch IP pool"
+    },
+    {
+      "path": "/v1/me",
+      "operation_id": "current_user_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "CurrentUser",
+      "summary": "Fetch user for current session"
+    },
+    {
+      "path": "/v1/me/access-tokens",
+      "operation_id": "current_user_access_token_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "DeviceAccessToken",
+      "response_schema": "DeviceAccessTokenResultsPage",
+      "summary": "List access tokens"
+    },
+    {
+      "path": "/v1/me/groups",
+      "operation_id": "current_user_groups",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Group",
+      "response_schema": "GroupResultsPage",
+      "summary": "Fetch current user's groups"
+    },
+    {
+      "path": "/v1/me/ssh-keys",
+      "operation_id": "current_user_ssh_key_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SshKey",
+      "response_schema": "SshKeyResultsPage",
+      "summary": "List SSH public keys"
+    },
+    {
+      "path": "/v1/me/ssh-keys/{ssh_key}",
+      "operation_id": "current_user_ssh_key_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SshKey",
+      "summary": "Fetch SSH public key"
+    },
+    {
+      "path": "/v1/metrics/{metric_name}",
+      "operation_id": "silo_metric",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Measurement",
+      "response_schema": "MeasurementResultsPage",
+      "summary": "View metrics"
+    },
+    {
+      "path": "/v1/multicast-groups",
+      "operation_id": "multicast_group_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "MulticastGroup",
+      "response_schema": "MulticastGroupResultsPage",
+      "summary": "List multicast groups"
+    },
+    {
+      "path": "/v1/multicast-groups/{multicast_group}",
+      "operation_id": "multicast_group_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "MulticastGroup",
+      "summary": "Fetch multicast group"
+    },
+    {
+      "path": "/v1/multicast-groups/{multicast_group}/members",
+      "operation_id": "multicast_group_member_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "MulticastGroupMember",
+      "response_schema": "MulticastGroupMemberResultsPage",
+      "summary": "List members of multicast group"
+    },
+    {
+      "path": "/v1/network-interfaces",
+      "operation_id": "instance_network_interface_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "InstanceNetworkInterface",
+      "response_schema": "InstanceNetworkInterfaceResultsPage",
+      "summary": "List network interfaces"
+    },
+    {
+      "path": "/v1/network-interfaces/{interface}",
+      "operation_id": "instance_network_interface_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "InstanceNetworkInterface",
+      "summary": "Fetch network interface"
+    },
+    {
+      "path": "/v1/ping",
+      "operation_id": "ping",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Ping",
+      "summary": "Ping API"
+    },
+    {
+      "path": "/v1/policy",
+      "operation_id": "policy_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloRolePolicy",
+      "summary": "Fetch current silo's IAM policy"
+    },
+    {
+      "path": "/v1/projects",
+      "operation_id": "project_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Project",
+      "response_schema": "ProjectResultsPage",
+      "summary": "List projects"
+    },
+    {
+      "path": "/v1/projects/{project}",
+      "operation_id": "project_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Project",
+      "summary": "Fetch project"
+    },
+    {
+      "path": "/v1/projects/{project}/policy",
+      "operation_id": "project_policy_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ProjectRolePolicy",
+      "summary": "Fetch project's IAM policy"
+    },
+    {
+      "path": "/v1/snapshots",
+      "operation_id": "snapshot_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Snapshot",
+      "response_schema": "SnapshotResultsPage",
+      "summary": "List snapshots"
+    },
+    {
+      "path": "/v1/snapshots/{snapshot}",
+      "operation_id": "snapshot_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Snapshot",
+      "summary": "Fetch snapshot"
+    },
+    {
+      "path": "/v1/subnet-pools",
+      "operation_id": "subnet_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloSubnetPool",
+      "response_schema": "SiloSubnetPoolResultsPage",
+      "summary": "List subnet pools"
+    },
+    {
+      "path": "/v1/subnet-pools/{pool}",
+      "operation_id": "subnet_pool_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloSubnetPool",
+      "summary": "Fetch subnet pool"
+    },
+    {
+      "path": "/v1/system/audit-log",
+      "operation_id": "audit_log_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AuditLogEntry",
+      "response_schema": "AuditLogEntryResultsPage",
+      "summary": "View audit log"
+    },
+    {
+      "path": "/v1/system/hardware/disk-adoption-requests",
+      "operation_id": "physical_disk_list_adoption_requests",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "PhysicalDiskAdoptionRequest",
+      "response_schema": "PhysicalDiskAdoptionRequestResultsPage",
+      "summary": "List physical disk adoption requests"
+    },
+    {
+      "path": "/v1/system/hardware/disks",
+      "operation_id": "physical_disk_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "PhysicalDisk",
+      "response_schema": "PhysicalDiskResultsPage",
+      "summary": "List physical disks"
+    },
+    {
+      "path": "/v1/system/hardware/disks-unadopted",
+      "operation_id": "physical_disk_list_unadopted",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "UnadoptedPhysicalDisk",
+      "response_schema": "UnadoptedPhysicalDiskResultsPage",
+      "summary": "List physical disks that have not yet been adopted for use"
+    },
+    {
+      "path": "/v1/system/hardware/disks/{disk_id}",
+      "operation_id": "physical_disk_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "PhysicalDisk",
+      "summary": "Get physical disk"
+    },
+    {
+      "path": "/v1/system/hardware/rack-switch-port/{rack_id}/{switch_slot}/{port}/lldp/neighbors",
+      "operation_id": "networking_switch_port_lldp_neighbors",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "LldpNeighbor",
+      "response_schema": "LldpNeighborResultsPage",
+      "summary": "Fetch LLDP neighbors for switch port"
+    },
+    {
+      "path": "/v1/system/hardware/racks",
+      "operation_id": "rack_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Rack",
+      "response_schema": "RackResultsPage",
+      "summary": "List racks"
+    },
+    {
+      "path": "/v1/system/hardware/racks/{rack_id}",
+      "operation_id": "rack_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Rack",
+      "summary": "Fetch rack"
+    },
+    {
+      "path": "/v1/system/hardware/racks/{rack_id}/membership",
+      "operation_id": "rack_membership_status",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "RackMembershipStatus",
+      "summary": "Fetch rack cluster membership status"
+    },
+    {
+      "path": "/v1/system/hardware/sleds",
+      "operation_id": "sled_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Sled",
+      "response_schema": "SledResultsPage",
+      "summary": "List sleds"
+    },
+    {
+      "path": "/v1/system/hardware/sleds-uninitialized",
+      "operation_id": "sled_list_uninitialized",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "UninitializedSled",
+      "response_schema": "UninitializedSledResultsPage",
+      "summary": "List uninitialized sleds"
+    },
+    {
+      "path": "/v1/system/hardware/sleds/{sled_id}",
+      "operation_id": "sled_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Sled",
+      "summary": "Fetch sled"
+    },
+    {
+      "path": "/v1/system/hardware/sleds/{sled_id}/disks",
+      "operation_id": "sled_physical_disk_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "PhysicalDisk",
+      "response_schema": "PhysicalDiskResultsPage",
+      "summary": "List physical disks attached to sleds"
+    },
+    {
+      "path": "/v1/system/hardware/sleds/{sled_id}/instances",
+      "operation_id": "sled_instance_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SledInstance",
+      "response_schema": "SledInstanceResultsPage",
+      "summary": "List instances running on given sled"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port",
+      "operation_id": "networking_switch_port_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SwitchPort",
+      "response_schema": "SwitchPortResultsPage",
+      "summary": "List switch ports"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port/{port}/lldp/config",
+      "operation_id": "networking_switch_port_lldp_config_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "LldpLinkConfig",
+      "summary": "Fetch LLDP configuration for switch port"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port/{port}/status",
+      "operation_id": "networking_switch_port_status",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SwitchLinkState",
+      "summary": "Get switch port status"
+    },
+    {
+      "path": "/v1/system/hardware/switches",
+      "operation_id": "switch_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Switch",
+      "response_schema": "SwitchResultsPage",
+      "summary": "List switches"
+    },
+    {
+      "path": "/v1/system/hardware/switches/{switch_id}",
+      "operation_id": "switch_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Switch",
+      "summary": "Fetch switch"
+    },
+    {
+      "path": "/v1/system/identity-providers",
+      "operation_id": "silo_identity_provider_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "IdentityProvider",
+      "response_schema": "IdentityProviderResultsPage",
+      "summary": "List identity providers for silo"
+    },
+    {
+      "path": "/v1/system/identity-providers/saml/{provider}",
+      "operation_id": "saml_identity_provider_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SamlIdentityProvider",
+      "summary": "Fetch SAML identity provider"
+    },
+    {
+      "path": "/v1/system/ip-pools",
+      "operation_id": "system_ip_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "IpPool",
+      "response_schema": "IpPoolResultsPage",
+      "summary": "List IP pools"
+    },
+    {
+      "path": "/v1/system/ip-pools-service",
+      "operation_id": "system_ip_pool_service_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "IpPool",
+      "summary": "Fetch Oxide service IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools-service/ranges",
+      "operation_id": "system_ip_pool_service_range_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "IpPoolRange",
+      "response_schema": "IpPoolRangeResultsPage",
+      "summary": "List IP ranges for the Oxide service pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}",
+      "operation_id": "system_ip_pool_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "IpPool",
+      "summary": "Fetch IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/ranges",
+      "operation_id": "system_ip_pool_range_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "IpPoolRange",
+      "response_schema": "IpPoolRangeResultsPage",
+      "summary": "List ranges for IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/silos",
+      "operation_id": "system_ip_pool_silo_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "IpPoolSiloLink",
+      "response_schema": "IpPoolSiloLinkResultsPage",
+      "summary": "List IP pool's linked silos"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/utilization",
+      "operation_id": "system_ip_pool_utilization_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "IpPoolUtilization",
+      "summary": "Fetch IP pool utilization"
+    },
+    {
+      "path": "/v1/system/metrics/{metric_name}",
+      "operation_id": "system_metric",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Measurement",
+      "response_schema": "MeasurementResultsPage",
+      "summary": "View metrics"
+    },
+    {
+      "path": "/v1/system/networking/address-lot",
+      "operation_id": "networking_address_lot_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AddressLot",
+      "response_schema": "AddressLotResultsPage",
+      "summary": "List address lots"
+    },
+    {
+      "path": "/v1/system/networking/address-lot/{address_lot}",
+      "operation_id": "networking_address_lot_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AddressLotViewResponse",
+      "summary": "Fetch address lot"
+    },
+    {
+      "path": "/v1/system/networking/address-lot/{address_lot}/blocks",
+      "operation_id": "networking_address_lot_block_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "AddressLotBlock",
+      "response_schema": "AddressLotBlockResultsPage",
+      "summary": "List blocks in address lot"
+    },
+    {
+      "path": "/v1/system/networking/allow-list",
+      "operation_id": "networking_allow_list_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AllowList",
+      "summary": "Get user-facing services IP allowlist"
+    },
+    {
+      "path": "/v1/system/networking/bfd-status",
+      "operation_id": "networking_bfd_status",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Get BFD status"
+    },
+    {
+      "path": "/v1/system/networking/bgp",
+      "operation_id": "networking_bgp_config_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "BgpConfig",
+      "response_schema": "BgpConfigResultsPage",
+      "summary": "List BGP configurations"
+    },
+    {
+      "path": "/v1/system/networking/bgp-announce-set",
+      "operation_id": "networking_bgp_announce_set_list",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "List BGP announce sets"
+    },
+    {
+      "path": "/v1/system/networking/bgp-announce-set/{announce_set}/announcement",
+      "operation_id": "networking_bgp_announcement_list",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Get originated routes for a specified BGP announce set"
+    },
+    {
+      "path": "/v1/system/networking/bgp-exported",
+      "operation_id": "networking_bgp_exported",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "List BGP exported routes"
+    },
+    {
+      "path": "/v1/system/networking/bgp-imported",
+      "operation_id": "networking_bgp_imported",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Get imported IPv4 BGP routes"
+    },
+    {
+      "path": "/v1/system/networking/bgp-message-history",
+      "operation_id": "networking_bgp_message_history",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AggregateBgpMessageHistory",
+      "summary": "Get BGP router message history"
+    },
+    {
+      "path": "/v1/system/networking/bgp-status",
+      "operation_id": "networking_bgp_status",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Get BGP peer status"
+    },
+    {
+      "path": "/v1/system/networking/inbound-icmp",
+      "operation_id": "networking_inbound_icmp_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ServiceIcmpConfig",
+      "summary": "Return whether API services can receive limited ICMP traffic"
+    },
+    {
+      "path": "/v1/system/networking/loopback-address",
+      "operation_id": "networking_loopback_address_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "LoopbackAddress",
+      "response_schema": "LoopbackAddressResultsPage",
+      "summary": "List loopback addresses"
+    },
+    {
+      "path": "/v1/system/networking/settings",
+      "operation_id": "system_networking_settings_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SystemNetworkingSettings",
+      "summary": "Fetch fleet-wide networking settings"
+    },
+    {
+      "path": "/v1/system/networking/switch-port-settings",
+      "operation_id": "networking_switch_port_settings_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SwitchPortSettingsIdentity",
+      "response_schema": "SwitchPortSettingsIdentityResultsPage",
+      "summary": "List switch port settings"
+    },
+    {
+      "path": "/v1/system/networking/switch-port-settings/{port}",
+      "operation_id": "networking_switch_port_settings_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SwitchPortSettings",
+      "summary": "Get information about switch port"
+    },
+    {
+      "path": "/v1/system/policy",
+      "operation_id": "system_policy_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "FleetRolePolicy",
+      "summary": "Fetch top-level IAM policy"
+    },
+    {
+      "path": "/v1/system/scim/tokens",
+      "operation_id": "scim_token_list",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "List SCIM tokens"
+    },
+    {
+      "path": "/v1/system/scim/tokens/{token_id}",
+      "operation_id": "scim_token_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ScimClientBearerToken",
+      "summary": "Fetch SCIM token"
+    },
+    {
+      "path": "/v1/system/silo-quotas",
+      "operation_id": "system_quotas_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloQuotas",
+      "response_schema": "SiloQuotasResultsPage",
+      "summary": "List resource quotas for all silos"
+    },
+    {
+      "path": "/v1/system/silos",
+      "operation_id": "silo_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Silo",
+      "response_schema": "SiloResultsPage",
+      "summary": "List silos"
+    },
+    {
+      "path": "/v1/system/silos/{silo}",
+      "operation_id": "silo_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Silo",
+      "summary": "Fetch silo"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/ip-pools",
+      "operation_id": "silo_ip_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloIpPool",
+      "response_schema": "SiloIpPoolResultsPage",
+      "summary": "List IP pools linked to silo"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/policy",
+      "operation_id": "silo_policy_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloRolePolicy",
+      "summary": "Fetch silo IAM policy"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/quotas",
+      "operation_id": "silo_quotas_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloQuotas",
+      "summary": "Fetch resource quotas for silo"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/subnet-pools",
+      "operation_id": "silo_subnet_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloSubnetPool",
+      "response_schema": "SiloSubnetPoolResultsPage",
+      "summary": "List subnet pools linked to a silo"
+    },
+    {
+      "path": "/v1/system/subnet-pools",
+      "operation_id": "system_subnet_pool_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SubnetPool",
+      "response_schema": "SubnetPoolResultsPage",
+      "summary": "List subnet pools"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}",
+      "operation_id": "system_subnet_pool_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SubnetPool",
+      "summary": "Fetch subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/members",
+      "operation_id": "system_subnet_pool_member_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SubnetPoolMember",
+      "response_schema": "SubnetPoolMemberResultsPage",
+      "summary": "List members in subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/silos",
+      "operation_id": "system_subnet_pool_silo_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SubnetPoolSiloLink",
+      "response_schema": "SubnetPoolSiloLinkResultsPage",
+      "summary": "List silos linked to subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/utilization",
+      "operation_id": "system_subnet_pool_utilization_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SubnetPoolUtilization",
+      "summary": "Fetch subnet pool utilization"
+    },
+    {
+      "path": "/v1/system/timeseries/schemas",
+      "operation_id": "system_timeseries_schema_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "TimeseriesSchema",
+      "response_schema": "TimeseriesSchemaResultsPage",
+      "summary": "List timeseries schemas"
+    },
+    {
+      "path": "/v1/system/update/repositories",
+      "operation_id": "system_update_repository_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "TufRepo",
+      "response_schema": "TufRepoResultsPage",
+      "summary": "List all TUF repositories"
+    },
+    {
+      "path": "/v1/system/update/repositories/{system_version}",
+      "operation_id": "system_update_repository_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "TufRepo",
+      "summary": "Fetch system release repository by version"
+    },
+    {
+      "path": "/v1/system/update/status",
+      "operation_id": "system_update_status",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "UpdateStatus",
+      "summary": "Fetch system update status"
+    },
+    {
+      "path": "/v1/system/update/trust-roots",
+      "operation_id": "system_update_trust_root_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "UpdatesTrustRoot",
+      "response_schema": "UpdatesTrustRootResultsPage",
+      "summary": "List root roles in the updates trust store"
+    },
+    {
+      "path": "/v1/system/update/trust-roots/{trust_root_id}",
+      "operation_id": "system_update_trust_root_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "UpdatesTrustRoot",
+      "summary": "Fetch trusted root role"
+    },
+    {
+      "path": "/v1/system/users",
+      "operation_id": "silo_user_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "User",
+      "response_schema": "UserResultsPage",
+      "summary": "List built-in (system) users in silo"
+    },
+    {
+      "path": "/v1/system/users-builtin",
+      "operation_id": "user_builtin_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "UserBuiltin",
+      "response_schema": "UserBuiltinResultsPage",
+      "summary": "List built-in users"
+    },
+    {
+      "path": "/v1/system/users-builtin/{user}",
+      "operation_id": "user_builtin_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "UserBuiltin",
+      "summary": "Fetch built-in user"
+    },
+    {
+      "path": "/v1/system/users/{user_id}",
+      "operation_id": "silo_user_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "User",
+      "summary": "Fetch built-in (system) user"
+    },
+    {
+      "path": "/v1/system/utilization/silos",
+      "operation_id": "silo_utilization_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "SiloUtilization",
+      "response_schema": "SiloUtilizationResultsPage",
+      "summary": "List current utilization state for all silos"
+    },
+    {
+      "path": "/v1/system/utilization/silos/{silo}",
+      "operation_id": "silo_utilization_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloUtilization",
+      "summary": "Fetch current utilization for given silo"
+    },
+    {
+      "path": "/v1/users",
+      "operation_id": "user_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "User",
+      "response_schema": "UserResultsPage",
+      "summary": "List users"
+    },
+    {
+      "path": "/v1/users/{user_id}",
+      "operation_id": "user_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "User",
+      "summary": "Fetch user"
+    },
+    {
+      "path": "/v1/users/{user_id}/access-tokens",
+      "operation_id": "user_token_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "DeviceAccessToken",
+      "response_schema": "DeviceAccessTokenResultsPage",
+      "summary": "List user's access tokens"
+    },
+    {
+      "path": "/v1/users/{user_id}/sessions",
+      "operation_id": "user_session_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "ConsoleSession",
+      "response_schema": "ConsoleSessionResultsPage",
+      "summary": "List user's console sessions"
+    },
+    {
+      "path": "/v1/utilization",
+      "operation_id": "utilization_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Utilization",
+      "summary": "Fetch resource utilization for user's current silo"
+    },
+    {
+      "path": "/v1/vpc-firewall-rules",
+      "operation_id": "vpc_firewall_rules_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcFirewallRules",
+      "summary": "List firewall rules"
+    },
+    {
+      "path": "/v1/vpc-router-routes",
+      "operation_id": "vpc_router_route_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "RouterRoute",
+      "response_schema": "RouterRouteResultsPage",
+      "summary": "List routes"
+    },
+    {
+      "path": "/v1/vpc-router-routes/{route}",
+      "operation_id": "vpc_router_route_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "RouterRoute",
+      "summary": "Fetch route"
+    },
+    {
+      "path": "/v1/vpc-routers",
+      "operation_id": "vpc_router_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "VpcRouter",
+      "response_schema": "VpcRouterResultsPage",
+      "summary": "List routers"
+    },
+    {
+      "path": "/v1/vpc-routers/{router}",
+      "operation_id": "vpc_router_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcRouter",
+      "summary": "Fetch router"
+    },
+    {
+      "path": "/v1/vpc-subnets",
+      "operation_id": "vpc_subnet_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "VpcSubnet",
+      "response_schema": "VpcSubnetResultsPage",
+      "summary": "List subnets"
+    },
+    {
+      "path": "/v1/vpc-subnets/{subnet}",
+      "operation_id": "vpc_subnet_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcSubnet",
+      "summary": "Fetch subnet"
+    },
+    {
+      "path": "/v1/vpc-subnets/{subnet}/network-interfaces",
+      "operation_id": "vpc_subnet_list_network_interfaces",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "InstanceNetworkInterface",
+      "response_schema": "InstanceNetworkInterfaceResultsPage",
+      "summary": "List network interfaces"
+    },
+    {
+      "path": "/v1/vpcs",
+      "operation_id": "vpc_list",
+      "method": "get",
+      "paginated": true,
+      "item_schema": "Vpc",
+      "response_schema": "VpcResultsPage",
+      "summary": "List VPCs"
+    },
+    {
+      "path": "/v1/vpcs/{vpc}",
+      "operation_id": "vpc_view",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Vpc",
+      "summary": "Fetch VPC"
+    },
+    {
+      "path": "/v1/webhook-secrets",
+      "operation_id": "webhook_secrets_list",
+      "method": "get",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "WebhookSecrets",
+      "summary": "List webhook receiver secret IDs"
+    },
+    {
+      "path": "/device/auth",
+      "operation_id": "device_auth_request",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Start an OAuth 2.0 Device Authorization Grant"
+    },
+    {
+      "path": "/device/confirm",
+      "operation_id": "device_auth_confirm",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Confirm an OAuth 2.0 Device Authorization Grant"
+    },
+    {
+      "path": "/device/token",
+      "operation_id": "device_access_token",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Request a device access token"
+    },
+    {
+      "path": "/experimental/v1/probes",
+      "operation_id": "probe_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create instrumentation probe"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles",
+      "operation_id": "support_bundle_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create support bundle"
+    },
+    {
+      "path": "/login/{silo_name}/saml/{provider_name}",
+      "operation_id": "login_saml",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Authenticate user via SAML"
+    },
+    {
+      "path": "/v1/affinity-groups",
+      "operation_id": "affinity_group_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create affinity group"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}/members/instance/{instance}",
+      "operation_id": "affinity_group_member_instance_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add member to affinity group"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}/probe",
+      "operation_id": "alert_receiver_probe",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AlertProbeResult",
+      "summary": "Send liveness probe to alert receiver"
+    },
+    {
+      "path": "/v1/alert-receivers/{receiver}/subscriptions",
+      "operation_id": "alert_receiver_subscription_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add alert receiver subscription"
+    },
+    {
+      "path": "/v1/alerts/{alert_id}/resend",
+      "operation_id": "alert_delivery_resend",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Request re-delivery of alert"
+    },
+    {
+      "path": "/v1/anti-affinity-groups",
+      "operation_id": "anti_affinity_group_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create anti-affinity group"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}/members/instance/{instance}",
+      "operation_id": "anti_affinity_group_member_instance_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add member to anti-affinity group"
+    },
+    {
+      "path": "/v1/certificates",
+      "operation_id": "certificate_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create system-wide x.509 certificate"
+    },
+    {
+      "path": "/v1/disks",
+      "operation_id": "disk_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create disk"
+    },
+    {
+      "path": "/v1/disks/{disk}/bulk-write",
+      "operation_id": "disk_bulk_write_import",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Import blocks into disk"
+    },
+    {
+      "path": "/v1/disks/{disk}/bulk-write-start",
+      "operation_id": "disk_bulk_write_import_start",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Start importing blocks into disk"
+    },
+    {
+      "path": "/v1/disks/{disk}/bulk-write-stop",
+      "operation_id": "disk_bulk_write_import_stop",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Stop importing blocks into disk"
+    },
+    {
+      "path": "/v1/disks/{disk}/finalize",
+      "operation_id": "disk_finalize_import",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Confirm disk block import completion"
+    },
+    {
+      "path": "/v1/external-subnets",
+      "operation_id": "external_subnet_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create external subnet"
+    },
+    {
+      "path": "/v1/external-subnets/{external_subnet}/attach",
+      "operation_id": "external_subnet_attach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Attach external subnet to instance"
+    },
+    {
+      "path": "/v1/external-subnets/{external_subnet}/detach",
+      "operation_id": "external_subnet_detach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach external subnet from instance"
+    },
+    {
+      "path": "/v1/floating-ips",
+      "operation_id": "floating_ip_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create floating IP"
+    },
+    {
+      "path": "/v1/floating-ips/{floating_ip}/attach",
+      "operation_id": "floating_ip_attach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Attach floating IP"
+    },
+    {
+      "path": "/v1/floating-ips/{floating_ip}/detach",
+      "operation_id": "floating_ip_detach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach floating IP"
+    },
+    {
+      "path": "/v1/images",
+      "operation_id": "image_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create image"
+    },
+    {
+      "path": "/v1/images/{image}/demote",
+      "operation_id": "image_demote",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Demote silo image"
+    },
+    {
+      "path": "/v1/images/{image}/promote",
+      "operation_id": "image_promote",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Promote project image"
+    },
+    {
+      "path": "/v1/instances",
+      "operation_id": "instance_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/disks/attach",
+      "operation_id": "instance_disk_attach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Attach disk to instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/disks/detach",
+      "operation_id": "instance_disk_detach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Detach disk from instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/external-ips/ephemeral",
+      "operation_id": "instance_ephemeral_ip_attach",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Allocate and attach ephemeral IP to instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/reboot",
+      "operation_id": "instance_reboot",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Reboot instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/start",
+      "operation_id": "instance_start",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Boot instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/stop",
+      "operation_id": "instance_stop",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Stop instance"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-addresses",
+      "operation_id": "internet_gateway_ip_address_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Attach IP address to internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateway-ip-pools",
+      "operation_id": "internet_gateway_ip_pool_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Attach IP pool to internet gateway"
+    },
+    {
+      "path": "/v1/internet-gateways",
+      "operation_id": "internet_gateway_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create VPC internet gateway"
+    },
+    {
+      "path": "/v1/login/{silo_name}/local",
+      "operation_id": "login_local",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Authenticate user via username and password"
+    },
+    {
+      "path": "/v1/logout",
+      "operation_id": "logout",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Log user out of web console by deleting session on client and server"
+    },
+    {
+      "path": "/v1/me/ssh-keys",
+      "operation_id": "current_user_ssh_key_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create SSH public key"
+    },
+    {
+      "path": "/v1/network-interfaces",
+      "operation_id": "instance_network_interface_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create network interface"
+    },
+    {
+      "path": "/v1/projects",
+      "operation_id": "project_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create project"
+    },
+    {
+      "path": "/v1/snapshots",
+      "operation_id": "snapshot_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create snapshot"
+    },
+    {
+      "path": "/v1/system/hardware/racks/{rack_id}/membership/abort",
+      "operation_id": "rack_membership_abort",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "RackMembershipStatus",
+      "summary": "Abort the latest rack membership change"
+    },
+    {
+      "path": "/v1/system/hardware/racks/{rack_id}/membership/add",
+      "operation_id": "rack_membership_add_sleds",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "RackMembershipStatus",
+      "summary": "Add new sleds to rack membership"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port/{port}/lldp/config",
+      "operation_id": "networking_switch_port_lldp_config_update",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Update LLDP configuration for switch port"
+    },
+    {
+      "path": "/v1/system/hardware/switch-port/{port}/settings",
+      "operation_id": "networking_switch_port_apply_settings",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Apply switch port settings"
+    },
+    {
+      "path": "/v1/system/identity-providers/local/users",
+      "operation_id": "local_idp_user_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create user"
+    },
+    {
+      "path": "/v1/system/identity-providers/local/users/{user_id}/set-password",
+      "operation_id": "local_idp_user_set_password",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Set or invalidate user's password"
+    },
+    {
+      "path": "/v1/system/identity-providers/saml",
+      "operation_id": "saml_identity_provider_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create SAML identity provider"
+    },
+    {
+      "path": "/v1/system/ip-pools",
+      "operation_id": "system_ip_pool_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools-service/ranges/add",
+      "operation_id": "system_ip_pool_service_range_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add IP range to Oxide service pool"
+    },
+    {
+      "path": "/v1/system/ip-pools-service/ranges/remove",
+      "operation_id": "system_ip_pool_service_range_remove",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove IP range from Oxide service pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/ranges/add",
+      "operation_id": "system_ip_pool_range_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add range to IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/ranges/remove",
+      "operation_id": "system_ip_pool_range_remove",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove range from IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/silos",
+      "operation_id": "system_ip_pool_silo_link",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Link IP pool to silo"
+    },
+    {
+      "path": "/v1/system/networking/address-lot",
+      "operation_id": "networking_address_lot_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create address lot"
+    },
+    {
+      "path": "/v1/system/networking/bfd-disable",
+      "operation_id": "networking_bfd_disable",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Disable BFD session"
+    },
+    {
+      "path": "/v1/system/networking/bfd-enable",
+      "operation_id": "networking_bfd_enable",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Enable BFD session"
+    },
+    {
+      "path": "/v1/system/networking/bgp",
+      "operation_id": "networking_bgp_config_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create BGP configuration"
+    },
+    {
+      "path": "/v1/system/networking/loopback-address",
+      "operation_id": "networking_loopback_address_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create loopback address"
+    },
+    {
+      "path": "/v1/system/networking/switch-port-settings",
+      "operation_id": "networking_switch_port_settings_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create switch port settings"
+    },
+    {
+      "path": "/v1/system/scim/tokens",
+      "operation_id": "scim_token_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create SCIM token"
+    },
+    {
+      "path": "/v1/system/silos",
+      "operation_id": "silo_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create silo"
+    },
+    {
+      "path": "/v1/system/subnet-pools",
+      "operation_id": "system_subnet_pool_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/members/add",
+      "operation_id": "system_subnet_pool_member_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add member to subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/members/remove",
+      "operation_id": "system_subnet_pool_member_remove",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Remove member from subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/silos",
+      "operation_id": "system_subnet_pool_silo_link",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Link subnet pool to silo"
+    },
+    {
+      "path": "/v1/system/timeseries/query",
+      "operation_id": "system_timeseries_query",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "OxqlQueryResult",
+      "summary": "Run timeseries query"
+    },
+    {
+      "path": "/v1/system/update/trust-roots",
+      "operation_id": "system_update_trust_root_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add trusted root role to updates trust store"
+    },
+    {
+      "path": "/v1/timeseries/query",
+      "operation_id": "timeseries_query",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "OxqlQueryResult",
+      "summary": "Run project-scoped timeseries query"
+    },
+    {
+      "path": "/v1/users/{user_id}/logout",
+      "operation_id": "user_logout",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Log user out"
+    },
+    {
+      "path": "/v1/vpc-router-routes",
+      "operation_id": "vpc_router_route_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create route"
+    },
+    {
+      "path": "/v1/vpc-routers",
+      "operation_id": "vpc_router_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create VPC router"
+    },
+    {
+      "path": "/v1/vpc-subnets",
+      "operation_id": "vpc_subnet_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create subnet"
+    },
+    {
+      "path": "/v1/vpcs",
+      "operation_id": "vpc_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create VPC"
+    },
+    {
+      "path": "/v1/webhook-receivers",
+      "operation_id": "webhook_receiver_create",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Create webhook receiver"
+    },
+    {
+      "path": "/v1/webhook-secrets",
+      "operation_id": "webhook_secrets_add",
+      "method": "post",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Add secret to webhook receiver"
+    },
+    {
+      "path": "/experimental/v1/system/support-bundles/{bundle_id}",
+      "operation_id": "support_bundle_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SupportBundleInfo",
+      "summary": "Update support bundle"
+    },
+    {
+      "path": "/v1/affinity-groups/{affinity_group}",
+      "operation_id": "affinity_group_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AffinityGroup",
+      "summary": "Update affinity group"
+    },
+    {
+      "path": "/v1/anti-affinity-groups/{anti_affinity_group}",
+      "operation_id": "anti_affinity_group_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AntiAffinityGroup",
+      "summary": "Update anti-affinity group"
+    },
+    {
+      "path": "/v1/auth-settings",
+      "operation_id": "auth_settings_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloAuthSettings",
+      "summary": "Update current silo's auth settings"
+    },
+    {
+      "path": "/v1/external-subnets/{external_subnet}",
+      "operation_id": "external_subnet_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ExternalSubnet",
+      "summary": "Update external subnet"
+    },
+    {
+      "path": "/v1/floating-ips/{floating_ip}",
+      "operation_id": "floating_ip_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "FloatingIp",
+      "summary": "Update floating IP"
+    },
+    {
+      "path": "/v1/instances/{instance}",
+      "operation_id": "instance_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Instance",
+      "summary": "Update instance"
+    },
+    {
+      "path": "/v1/instances/{instance}/multicast-groups/{multicast_group}",
+      "operation_id": "instance_multicast_group_join",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Join multicast group by name, IP address, or UUID"
+    },
+    {
+      "path": "/v1/network-interfaces/{interface}",
+      "operation_id": "instance_network_interface_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "InstanceNetworkInterface",
+      "summary": "Update network interface"
+    },
+    {
+      "path": "/v1/policy",
+      "operation_id": "policy_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloRolePolicy",
+      "summary": "Update current silo's IAM policy"
+    },
+    {
+      "path": "/v1/projects/{project}",
+      "operation_id": "project_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Project",
+      "summary": "Update project"
+    },
+    {
+      "path": "/v1/projects/{project}/policy",
+      "operation_id": "project_policy_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "ProjectRolePolicy",
+      "summary": "Update project's IAM policy"
+    },
+    {
+      "path": "/v1/system/hardware/disk-adoption-request",
+      "operation_id": "physical_disk_enable_adoption",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Enable adoption of a physical disk for general use"
+    },
+    {
+      "path": "/v1/system/hardware/sleds/{sled_id}/provision-policy",
+      "operation_id": "sled_set_provision_policy",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SledProvisionPolicyResponse",
+      "summary": "Set sled provision policy"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}",
+      "operation_id": "system_ip_pool_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "IpPool",
+      "summary": "Update IP pool"
+    },
+    {
+      "path": "/v1/system/ip-pools/{pool}/silos/{silo}",
+      "operation_id": "system_ip_pool_silo_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "IpPoolSiloLink",
+      "summary": "Make IP pool default for silo"
+    },
+    {
+      "path": "/v1/system/networking/allow-list",
+      "operation_id": "networking_allow_list_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "AllowList",
+      "summary": "Update user-facing services IP allowlist"
+    },
+    {
+      "path": "/v1/system/networking/bgp-announce-set",
+      "operation_id": "networking_bgp_announce_set_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "BgpAnnounceSet",
+      "summary": "Update BGP announce set"
+    },
+    {
+      "path": "/v1/system/networking/inbound-icmp",
+      "operation_id": "networking_inbound_icmp_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Set whether API services can receive limited ICMP traffic"
+    },
+    {
+      "path": "/v1/system/networking/settings",
+      "operation_id": "system_networking_settings_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SystemNetworkingSettings",
+      "summary": "Update fleet-wide networking settings"
+    },
+    {
+      "path": "/v1/system/policy",
+      "operation_id": "system_policy_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "FleetRolePolicy",
+      "summary": "Update top-level IAM policy"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/policy",
+      "operation_id": "silo_policy_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloRolePolicy",
+      "summary": "Update silo IAM policy"
+    },
+    {
+      "path": "/v1/system/silos/{silo}/quotas",
+      "operation_id": "silo_quotas_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SiloQuotas",
+      "summary": "Update resource quotas for silo"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}",
+      "operation_id": "system_subnet_pool_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SubnetPool",
+      "summary": "Update subnet pool"
+    },
+    {
+      "path": "/v1/system/subnet-pools/{pool}/silos/{silo}",
+      "operation_id": "system_subnet_pool_silo_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "SubnetPoolSiloLink",
+      "summary": "Update subnet pool's link to silo"
+    },
+    {
+      "path": "/v1/system/update/recovery-finish",
+      "operation_id": "system_update_recovery_finish",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Clear system recovery status"
+    },
+    {
+      "path": "/v1/system/update/repositories",
+      "operation_id": "system_update_repository_upload",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "TufRepoUpload",
+      "summary": "Upload system release repository"
+    },
+    {
+      "path": "/v1/system/update/target-release",
+      "operation_id": "target_release_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Set target release"
+    },
+    {
+      "path": "/v1/vpc-firewall-rules",
+      "operation_id": "vpc_firewall_rules_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcFirewallRules",
+      "summary": "Replace firewall rules"
+    },
+    {
+      "path": "/v1/vpc-router-routes/{route}",
+      "operation_id": "vpc_router_route_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "RouterRoute",
+      "summary": "Update route"
+    },
+    {
+      "path": "/v1/vpc-routers/{router}",
+      "operation_id": "vpc_router_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcRouter",
+      "summary": "Update router"
+    },
+    {
+      "path": "/v1/vpc-subnets/{subnet}",
+      "operation_id": "vpc_subnet_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "VpcSubnet",
+      "summary": "Update subnet"
+    },
+    {
+      "path": "/v1/vpcs/{vpc}",
+      "operation_id": "vpc_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": "Vpc",
+      "summary": "Update VPC"
+    },
+    {
+      "path": "/v1/webhook-receivers/{receiver}",
+      "operation_id": "webhook_receiver_update",
+      "method": "put",
+      "paginated": false,
+      "item_schema": null,
+      "response_schema": null,
+      "summary": "Update webhook receiver"
+    }
+  ],
+  "generated_at": "2026-06-26T15:44:36.179702Z"
+}

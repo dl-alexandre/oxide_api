@@ -1,0 +1,52 @@
+# Changelog
+
+## 0.0.1 - 2026-06-26
+
+First Hex release candidate for the Oxide control plane API client.
+
+### Oxide API Schema
+
+- Targets Oxide API schema version `2026060800.0.0`.
+- Vendors the OpenAPI document at `priv/oxide_api/openapi/2026060800.0.0.json`.
+- Generates endpoint metadata at `priv/oxide_api/endpoints.json`.
+- Release verification reports `218/218` endpoint paths and `315/315`
+  operations covered.
+
+### Added
+
+- Core `Req`-based client with bearer auth, configurable timeouts/retries,
+  `api-version` and `user-agent` headers, response metadata, 204/205 body
+  normalization, and Oxide CLI credential-file loading.
+- Structured `%OxideApi.Error{}` with request ID extraction, retry/not-found
+  predicates, formatted exception messages, and log metadata helpers.
+- Full path and operation wrapper coverage for the vendored schema, including
+  common user/project resources, system/admin APIs, and experimental support
+  bundle/probe endpoints.
+- Schema-derived pagination metadata plus path-based and operation-ID streaming
+  helpers.
+- Plain-map builders for common project, disk, image, instance, VPC, subnet,
+  floating IP, network interface, snapshot, and firewall request bodies.
+- `OxideApi.Workflows` helpers for common project, instance, VPC/subnet, and
+  image-from-snapshot workflows.
+- `mix oxide_api.schema` and `mix oxide_api.schema.latest` release-maintenance
+  tasks.
+- CI, ExUnit tests, Credo, Dialyzer, ExDoc, package metadata, and gated live
+  integration tests via `OXIDE_HOST` and `OXIDE_TOKEN`.
+
+### Verification
+
+- `mix oxide_api.schema.latest`
+- `mix oxide_api.schema --write`
+- `mix verify`
+- `mix credo --strict`
+- `mix dialyzer --format short`
+- `mix docs`
+- `mix hex.build`
+- `mix hex.build --unpack`
+
+### Known Limitations
+
+- Request and response bodies are plain maps; this release does not generate
+  structs or schema-derived Elixir types.
+- Live integration tests run only when `OXIDE_HOST` and `OXIDE_TOKEN` are set.
+- Telemetry hooks are not included in this release.

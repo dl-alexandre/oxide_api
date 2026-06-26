@@ -94,6 +94,15 @@ defmodule OxideApi do
   defdelegate fetch_all(client, operation_or_path, opts \\ []), to: Operation
 
   @doc """
+  Runs an OxQL timeseries query.
+
+  Pass `project: "name"` for the project-scoped endpoint. Without `:project`,
+  the fleet/system scoped endpoint is used.
+  """
+  @spec query_oxql(Client.t(), String.t(), keyword()) :: Client.result()
+  defdelegate query_oxql(client, query, opts \\ []), to: OxideApi.Oxql, as: :query
+
+  @doc """
   Returns every schema operation known to the generated endpoint inventory.
   """
   @spec operations() :: [Operation.t()]

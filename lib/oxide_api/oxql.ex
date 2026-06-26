@@ -1,0 +1,123 @@
+defmodule OxideApi.Oxql do
+  @moduledoc """
+  Convenience helpers for running OxQL timeseries queries.
+
+  OxQL queries are sent as strings to the Oxide timeseries query endpoints.
+  Pass `:project` to `query/3` for project-scoped data, or omit it to run the
+  fleet/system scoped endpoint.
+  """
+
+  alias OxideApi.{Client, Error}
+
+  @type query_result :: map()
+
+  @doc """
+  Runs an OxQL query.
+
+  When `:project` is present, the project-scoped endpoint is used:
+
+      OxideApi.Oxql.query(client, "get virtual_disk:bytes_read", project: "prod")
+
+  Without `:project`, the system endpoint is used:
+
+      OxideApi.Oxql.query(client, "get sled_cpu:usage")
+  """
+  @spec query(Client.t(), String.t(), keyword()) :: Client.result()
+  def query(%Client{} = client, query, opts \\ []) do
+    case Keyword.pop(opts, :project) do
+      {nil, opts} -> system_query(client, query, opts)
+      {project, opts} -> project_query(client, project, query, opts)
+    end
+  end
+
+  @doc """
+  Runs a project-scoped OxQL query.
+  """
+  @spec project_query(Client.t(), String.t(), String.t(), keyword()) :: Client.result()
+  def project_query(%Client{} = client, project, query, opts \\ []) do
+    with {:ok, body} <- query_body(query),
+         {:ok, project} <- required_string(project, "project") do
+      params =
+        opts
+        |> Keyword.get(:params, [])
+        |> put_param(:project, project)
+
+      Client.post(client, "/v1/timeseries/query", body,
+        params: params,
+        headers: Keyword.get(opts, :headers, []),
+        req_options: Keyword.get(opts, :req_options, [])
+      )
+    end
+  end
+
+  @doc """
+  Runs a fleet/system-scoped OxQL query.
+  """
+  @spec system_query(Client.t(), String.t(), keyword()) :: Client.result()
+  def system_query(%Client{} = client, query, opts \\ []) do
+    with {:ok, body} <- query_body(query) do
+      Client.post(client, "/v1/system/timeseries/query", body,
+        headers: Keyword.get(opts, :headers, []),
+        req_options: Keyword.get(opts, :req_options, [])
+      )
+    end
+  end
+
+  @doc """
+  Returns the tables from a successful OxQL response map.
+  """
+  @spec tables(query_result()) :: [map()]
+  def tables(%{"tables" => tables}) when is_list(tables), do: tables
+  def tables(%{tables: tables}) when is_list(tables), do: tables
+  def tables(_result), do: []
+
+  @doc """
+  Flattens all timeseries entries across every table in an OxQL response.
+  """
+  @spec timeseries(query_result()) :: [map()]
+  def timeseries(result) do
+    result
+    |> tables()
+    |> Enum.flat_map(fn
+      %{"timeseries" => timeseries} when is_list(timeseries) -> timeseries
+      %{timeseries: timeseries} when is_list(timeseries) -> timeseries
+      _table -> []
+    end)
+  end
+
+  @doc """
+  Returns true when an OxQL response contains no timeseries entries.
+  """
+  @spec empty?(query_result()) :: boolean()
+  def empty?(result), do: timeseries(result) == []
+
+  defp query_body(query) when is_binary(query) do
+    if String.trim(query) == "" do
+      {:error, Error.config("missing required OxQL query")}
+    else
+      {:ok, %{"query" => query}}
+    end
+  end
+
+  defp query_body(_query), do: {:error, Error.config("missing required OxQL query")}
+
+  defp required_string(value, name) when is_binary(value) do
+    if String.trim(value) == "" do
+      {:error, Error.config("missing required :#{name} option")}
+    else
+      {:ok, value}
+    end
+  end
+
+  defp required_string(_value, name),
+    do: {:error, Error.config("missing required :#{name} option")}
+
+  defp put_param(params, key, value) when is_map(params), do: Map.put(params, key, value)
+
+  defp put_param(params, key, value) when is_list(params) do
+    params
+    |> List.keydelete(key, 0)
+    |> List.keydelete(to_string(key), 0)
+    |> Keyword.put(key, value)
+  end
+end

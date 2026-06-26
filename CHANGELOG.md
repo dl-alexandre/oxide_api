@@ -24,6 +24,8 @@ First Hex release candidate for the Oxide control plane API client.
   bundle/probe endpoints.
 - Schema-derived pagination metadata plus path-based and operation-ID streaming
   helpers.
+- OxQL convenience helpers for project and fleet/system timeseries queries,
+  including result traversal helpers and an example script.
 - Plain-map builders for common project, disk, image, instance, VPC, subnet,
   floating IP, network interface, snapshot, and firewall request bodies.
 - `OxideApi.Workflows` helpers for common project, instance, VPC/subnet, and

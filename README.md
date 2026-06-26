@@ -257,6 +257,50 @@ Query options such as `limit`, `sort_by`, and resource filters are passed
 through as API query parameters. Retry and backoff behavior should be configured
 on the client through `Req` options.
 
+## OxQL Timeseries Queries
+
+Oxide timeseries queries are written in OxQL. Use `OxideApi.Oxql.query/3` with
+`project: "name"` for project-scoped data:
+
+```elixir
+{:ok, result} =
+  OxideApi.Oxql.query(
+    oxide,
+    "get virtual_disk:bytes_read",
+    project: "prod"
+  )
+
+result
+|> OxideApi.Oxql.timeseries()
+|> Enum.each(fn series ->
+  IO.inspect(series["fields"])
+  IO.inspect(series["points"])
+end)
+```
+
+Omit `:project` to use the fleet/system-scoped endpoint:
+
+```elixir
+{:ok, result} = OxideApi.Oxql.query(oxide, "get sled_cpu:usage")
+
+if OxideApi.Oxql.empty?(result) do
+  Logger.info("OxQL query returned no timeseries")
+end
+```
+
+You can list available timeseries schemas through the system endpoint:
+
+```elixir
+{:ok, schemas} = OxideApi.System.Timeseries.schemas(oxide, limit: 100)
+```
+
+There is also a runnable example in `examples/oxql_query.exs`:
+
+```sh
+OXIDE_HOST=https://rack.example.com OXIDE_TOKEN=... OXIDE_PROJECT=prod \
+  mix run examples/oxql_query.exs
+```
+
 ## Common Workflows
 
 Create or reuse a project:

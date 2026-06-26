@@ -59,7 +59,7 @@ defmodule OxideApi.MixProject do
         "GitHub" => @source_url
       },
       files:
-        ~w(lib priv mix.exs README.md CHANGELOG.md RELEASE_CHECKLIST.md LICENSE .formatter.exs)
+        ~w(lib priv examples mix.exs README.md CHANGELOG.md RELEASE_CHECKLIST.md LICENSE .formatter.exs)
     ]
   end
 
@@ -77,6 +77,7 @@ defmodule OxideApi.MixProject do
           OxideApi.Credentials,
           OxideApi.Error,
           OxideApi.Operation,
+          OxideApi.Oxql,
           OxideApi.Response,
           OxideApi.Workflows
         ],

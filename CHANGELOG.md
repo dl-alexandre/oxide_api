@@ -19,9 +19,12 @@ First Hex release candidate for the Oxide control plane API client.
   normalization, and Oxide CLI credential-file loading.
 - Structured `%OxideApi.Error{}` with request ID extraction, retry/not-found
   predicates, formatted exception messages, and log metadata helpers.
+- `OxideApi.Result` helpers for classifying result tuples in agent loops.
 - Full path and operation wrapper coverage for the vendored schema, including
   common user/project resources, system/admin APIs, and experimental support
   bundle/probe endpoints.
+- Generated operation metadata for request body schemas, response schemas,
+  response statuses, and path/query parameters.
 - Schema-derived pagination metadata plus path-based and operation-ID streaming
   helpers.
 - OxQL convenience helpers for project and fleet/system timeseries queries,
@@ -34,6 +37,7 @@ First Hex release candidate for the Oxide control plane API client.
   tasks.
 - CI, ExUnit tests, Credo, Dialyzer, ExDoc, package metadata, and gated live
   integration tests via `OXIDE_HOST` and `OXIDE_TOKEN`.
+- Runnable examples for device auth, common workflows, and OxQL queries.
 
 ### Verification
 

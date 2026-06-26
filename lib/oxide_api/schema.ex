@@ -8,6 +8,7 @@ defmodule OxideApi.Schema do
   @default_openapi_url "https://raw.githubusercontent.com/oxidecomputer/oxide.rs/v0.17.0%2B2026060800.0.0/oxide.json"
   @default_tags_url "https://api.github.com/repos/oxidecomputer/oxide.rs/tags?per_page=100"
   @http_methods ~w(delete get patch post put)
+  @json_content_type "application/json"
 
   @openapi_candidate_urls [
     @default_openapi_url,
@@ -443,7 +444,13 @@ defmodule OxideApi.Schema do
           path: normalize_path(path),
           operation_id: operation["operationId"],
           summary: operation["summary"],
+          parameters: operation_parameters(operation),
+          request_content_type: operation_request_content_type(operation),
+          request_schema: operation_request_schema(operation),
+          request_body_required: operation_request_body_required?(operation),
           paginated: paginated_schema?(resolved_schema),
+          response_status: operation_response_status(operation),
+          response_content_type: operation_response_content_type(operation),
           response_schema: schema_name(response_schema),
           item_schema: item_schema_name(resolved_schema)
         }
@@ -453,7 +460,128 @@ defmodule OxideApi.Schema do
   end
 
   defp operation_response_schema(operation) do
-    get_in(operation, ["responses", "200", "content", "application/json", "schema"])
+    operation
+    |> operation_response_body()
+    |> case do
+      nil -> nil
+      {_status, _content_type, schema} -> schema
+    end
+  end
+
+  defp operation_response_status(operation) do
+    operation
+    |> Map.get("responses", %{})
+    |> success_response_statuses()
+    |> case do
+      [{status, _response} | _responses] -> status
+      [] -> nil
+    end
+  end
+
+  defp operation_response_content_type(operation) do
+    operation
+    |> operation_response_body()
+    |> case do
+      nil -> nil
+      {_status, content_type, _schema} -> content_type
+    end
+  end
+
+  defp operation_response_body(operation) do
+    responses = Map.get(operation, "responses", %{})
+
+    responses
+    |> success_response_statuses()
+    |> Enum.find_value(fn {status, response} ->
+      response_body(status, response)
+    end)
+  end
+
+  defp operation_request_schema(operation) do
+    operation
+    |> operation_request_body()
+    |> case do
+      nil -> nil
+      {_content_type, schema} -> schema_name(schema)
+    end
+  end
+
+  defp operation_request_content_type(operation) do
+    operation
+    |> operation_request_body()
+    |> case do
+      nil -> nil
+      {content_type, _schema} -> content_type
+    end
+  end
+
+  defp operation_request_body_required?(operation) do
+    get_in(operation, ["requestBody", "required"]) == true
+  end
+
+  defp operation_request_body(operation) do
+    content = get_in(operation, ["requestBody", "content"]) || %{}
+
+    preferred_content_type =
+      Enum.find(
+        [@json_content_type, "application/x-www-form-urlencoded"],
+        &Map.has_key?(content, &1)
+      )
+
+    content_type =
+      preferred_content_type ||
+        content |> Map.keys() |> Enum.sort() |> List.first()
+
+    if content_type do
+      schema = get_in(content, [content_type, "schema"])
+      {content_type, schema}
+    end
+  end
+
+  defp response_body(status, response) do
+    content = Map.get(response, "content", %{})
+
+    content_type =
+      if Map.has_key?(content, @json_content_type) do
+        @json_content_type
+      else
+        content |> Map.keys() |> Enum.sort() |> List.first()
+      end
+
+    if content_type do
+      {status, content_type, get_in(content, [content_type, "schema"])}
+    end
+  end
+
+  defp success_status?(status) when is_binary(status) do
+    String.match?(status, ~r/^2\d\d$/)
+  end
+
+  defp success_status?(_status), do: false
+
+  defp success_response_statuses(responses) do
+    responses
+    |> Enum.filter(fn {status, _response} -> success_status?(status) end)
+    |> Enum.sort_by(fn {status, _response} -> status end)
+  end
+
+  defp operation_parameters(operation) do
+    operation
+    |> Map.get("parameters", [])
+    |> Enum.map(fn parameter ->
+      schema = parameter["schema"] || %{}
+
+      %{
+        name: parameter["name"],
+        in: parameter["in"],
+        required: parameter["required"] == true,
+        schema: schema_name(schema),
+        type: schema_type(schema),
+        format: schema["format"]
+      }
+      |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+      |> Map.new()
+    end)
   end
 
   defp resolve_schema(%{"$ref" => ref}, schemas) do
@@ -481,6 +609,11 @@ defmodule OxideApi.Schema do
 
   defp schema_name(%{"$ref" => ref}), do: ref_name(ref)
   defp schema_name(_schema), do: nil
+
+  defp schema_type(%{"type" => type}), do: type
+  defp schema_type(%{"$ref" => _ref}), do: nil
+  defp schema_type(%{"allOf" => [schema | _schemas]}), do: schema_type(schema)
+  defp schema_type(_schema), do: nil
 
   defp item_schema_name(%{"properties" => %{"items" => %{"items" => item_schema}}}) do
     schema_name(item_schema) || item_schema["type"]

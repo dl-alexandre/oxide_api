@@ -78,6 +78,7 @@ defmodule OxideApi.MixProject do
           OxideApi.Error,
           OxideApi.Operation,
           OxideApi.Oxql,
+          OxideApi.Result,
           OxideApi.Response,
           OxideApi.Workflows
         ],

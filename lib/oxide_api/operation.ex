@@ -8,12 +8,27 @@ defmodule OxideApi.Operation do
 
   alias OxideApi.Client
 
+  @type parameter :: %{
+          required(:name) => String.t(),
+          required(:in) => String.t(),
+          required(:required) => boolean(),
+          optional(:schema) => String.t(),
+          optional(:type) => String.t(),
+          optional(:format) => String.t()
+        }
+
   @type t :: %{
           method: String.t(),
           path: String.t(),
           operation_id: String.t() | nil,
           summary: String.t() | nil,
+          parameters: [parameter()],
+          request_content_type: String.t() | nil,
+          request_schema: String.t() | nil,
+          request_body_required: boolean(),
           paginated: boolean(),
+          response_status: String.t() | nil,
+          response_content_type: String.t() | nil,
           response_schema: String.t() | nil,
           item_schema: String.t() | nil
         }
@@ -63,6 +78,42 @@ defmodule OxideApi.Operation do
     all()
     |> Enum.filter(& &1.paginated)
   end
+
+  @doc """
+  Returns the generated request body schema name for an operation.
+  """
+  @spec request_schema(t() | String.t() | atom()) :: String.t() | nil
+  def request_schema(operation_or_id), do: operation!(operation_or_id).request_schema
+
+  @doc """
+  Returns the generated response body schema name for an operation.
+  """
+  @spec response_schema(t() | String.t() | atom()) :: String.t() | nil
+  def response_schema(operation_or_id), do: operation!(operation_or_id).response_schema
+
+  @doc """
+  Returns the generated success response status for an operation.
+  """
+  @spec response_status(t() | String.t() | atom()) :: String.t() | nil
+  def response_status(operation_or_id), do: operation!(operation_or_id).response_status
+
+  @doc """
+  Returns generated parameter metadata for an operation.
+  """
+  @spec parameters(t() | String.t() | atom()) :: [parameter()]
+  def parameters(operation_or_id), do: operation!(operation_or_id).parameters
+
+  @doc """
+  Returns generated query parameter metadata for an operation.
+  """
+  @spec query_parameters(t() | String.t() | atom()) :: [parameter()]
+  def query_parameters(operation_or_id), do: parameters_by_location(operation_or_id, "query")
+
+  @doc """
+  Returns generated path parameter metadata for an operation.
+  """
+  @spec path_parameters(t() | String.t() | atom()) :: [parameter()]
+  def path_parameters(operation_or_id), do: parameters_by_location(operation_or_id, "path")
 
   @doc """
   Renders a schema path by replacing `{name}` placeholders.
@@ -141,10 +192,41 @@ defmodule OxideApi.Operation do
       path: operation["path"],
       operation_id: operation["operation_id"],
       summary: operation["summary"],
+      parameters: normalize_parameters(operation["parameters"] || []),
+      request_content_type: operation["request_content_type"],
+      request_schema: operation["request_schema"],
+      request_body_required: operation["request_body_required"] == true,
       paginated: operation["paginated"] == true,
+      response_status: operation["response_status"],
+      response_content_type: operation["response_content_type"],
       response_schema: operation["response_schema"],
       item_schema: operation["item_schema"]
     }
+  end
+
+  defp normalize_parameters(parameters) do
+    Enum.map(parameters, fn parameter ->
+      %{
+        name: parameter["name"],
+        in: parameter["in"],
+        required: parameter["required"] == true
+      }
+      |> maybe_put(:schema, parameter["schema"])
+      |> maybe_put(:type, parameter["type"])
+      |> maybe_put(:format, parameter["format"])
+    end)
+  end
+
+  defp maybe_put(map, _key, nil), do: map
+  defp maybe_put(map, key, value), do: Map.put(map, key, value)
+
+  defp operation!(%{method: _method, path: _path} = operation), do: operation
+  defp operation!(operation_id), do: fetch!(operation_id)
+
+  defp parameters_by_location(operation_or_id, location) do
+    operation_or_id
+    |> parameters()
+    |> Enum.filter(&(&1.in == location))
   end
 
   defp fetch_path_param!(path_params, key) do

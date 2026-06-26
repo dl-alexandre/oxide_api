@@ -257,6 +257,20 @@ Query options such as `limit`, `sort_by`, and resource filters are passed
 through as API query parameters. Retry and backoff behavior should be configured
 on the client through `Req` options.
 
+Generated operation metadata also includes request/response shape names and
+parameters, which is useful for agents or code generation:
+
+```elixir
+OxideApi.Operation.request_schema(:instance_create)
+#=> "InstanceCreate"
+
+OxideApi.Operation.response_schema(:instance_create)
+#=> "Instance"
+
+OxideApi.Operation.query_parameters(:timeseries_query)
+#=> [%{name: "project", in: "query", required: true, schema: "NameOrId"}]
+```
+
 ## OxQL Timeseries Queries
 
 Oxide timeseries queries are written in OxQL. Use `OxideApi.Oxql.query/3` with
@@ -480,12 +494,39 @@ For structured logs, use `to_log_metadata/1`:
 Logger.warning("Oxide request failed", OxideApi.Error.to_log_metadata(error))
 ```
 
+For agent loops, `OxideApi.Result` classifies standard result tuples without
+losing the original error:
+
+```elixir
+case OxideApi.Result.tagged(OxideApi.get_project(oxide, "prod")) do
+  {:ok, project} ->
+    {:ok, project}
+
+  {:error, :not_found, _error} ->
+    OxideApi.Workflows.ensure_project(oxide, "prod")
+
+  {:error, category, error} when category in [:rate_limited, :retryable] ->
+    {:retry, error}
+
+  {:error, :transport_error, reason} ->
+    {:retry_transport, reason}
+
+  {:error, _category, error} ->
+    {:error, error}
+end
+```
+
+Use `OxideApi.Result.unwrap!/1` in scripts when raising on failure is preferred,
+or `OxideApi.Result.value/2` when an error should collapse to a default.
+
 ## Schema Coverage
 
 The project vendors the Oxide OpenAPI schema at
 `priv/oxide_api/openapi/2026060800.0.0.json` and keeps a generated endpoint
-inventory in `priv/oxide_api/endpoints.json`. Refresh the inventory and check
-local path and operation coverage with:
+inventory in `priv/oxide_api/endpoints.json`. The generated inventory includes
+path/operation coverage data plus per-operation parameters, request body schema,
+response status, and response body schema. Refresh the inventory and check local
+path and operation coverage with:
 
 ```sh
 mix oxide_api.schema --write
@@ -528,3 +569,12 @@ mix dialyzer
 
 Live integration tests are skipped unless `OXIDE_HOST` and `OXIDE_TOKEN` are
 set.
+
+## Examples
+
+The `examples/` directory contains small runnable scripts:
+
+- `examples/device_auth.exs` - device authorization, token polling, and token
+  storage.
+- `examples/common_workflows.exs` - project/VPC/subnet workflow helpers.
+- `examples/oxql_query.exs` - project or system OxQL query execution.

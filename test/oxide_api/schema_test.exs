@@ -43,6 +43,20 @@ defmodule OxideApi.SchemaTest do
              operation.method == "get" and operation.path == "/v1/projects" and
                operation.operation_id == "project_list" and operation.item_schema == "Project"
            end)
+
+    assert Enum.any?(inventory.operations, fn operation ->
+             operation.method == "post" and operation.operation_id == "timeseries_query" and
+               operation.request_schema == "TimeseriesQuery" and
+               operation.response_schema == "OxqlQueryResult" and
+               operation.response_status == "200" and
+               Enum.any?(operation.parameters, &(&1.name == "project" and &1.in == "query"))
+           end)
+
+    assert Enum.any?(inventory.operations, fn operation ->
+             operation.method == "post" and operation.operation_id == "instance_create" and
+               operation.request_schema == "InstanceCreate" and
+               operation.response_schema == "Instance" and operation.response_status == "201"
+           end)
   end
 
   test "reports coverage against local path list" do

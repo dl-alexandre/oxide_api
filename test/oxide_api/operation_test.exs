@@ -29,6 +29,24 @@ defmodule OxideApi.OperationTest do
     assert :error = Operation.fetch(:does_not_exist)
   end
 
+  test "exposes generated request, response, and parameter metadata" do
+    assert Operation.request_schema(:timeseries_query) == "TimeseriesQuery"
+    assert Operation.response_schema(:timeseries_query) == "OxqlQueryResult"
+    assert Operation.response_status(:timeseries_query) == "200"
+
+    assert [
+             %{
+               name: "project",
+               in: "query",
+               required: true,
+               schema: "NameOrId"
+             }
+           ] = Operation.query_parameters(:timeseries_query)
+
+    assert [%{name: "instance", in: "path", required: true}] =
+             Operation.path_parameters(:instance_view)
+  end
+
   test "renders schema paths with escaped path params" do
     assert "/v1/instances/name%2Fwith%2Fslash/disks" =
              Operation.render_path("/v1/instances/{instance}/disks",

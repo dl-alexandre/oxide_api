@@ -27,8 +27,9 @@ First Hex release candidate for the Oxide control plane API client.
   response statuses, and path/query parameters.
 - Schema-derived pagination metadata plus path-based and operation-ID streaming
   helpers.
-- OxQL convenience helpers for project and fleet/system timeseries queries,
-  including result traversal helpers and an example script.
+- First-class OxQL helpers for project and fleet/system timeseries queries,
+  including bang/tagged query variants, direct table/timeseries fetch helpers,
+  result traversal helpers, and an example script.
 - Plain-map builders for common project, disk, image, instance, VPC, subnet,
   floating IP, network interface, snapshot, and firewall request bodies.
 - `OxideApi.Workflows` helpers for common project, instance, VPC/subnet, and

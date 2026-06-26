@@ -273,20 +273,19 @@ OxideApi.Operation.query_parameters(:timeseries_query)
 
 ## OxQL Timeseries Queries
 
-Oxide timeseries queries are written in OxQL. Use `OxideApi.Oxql.query/3` with
-`project: "name"` for project-scoped data:
+Oxide timeseries queries are written in OxQL. Use
+`OxideApi.Oxql.fetch_timeseries/3` with `project: "name"` for the common
+project-scoped case:
 
 ```elixir
-{:ok, result} =
-  OxideApi.Oxql.query(
+{:ok, series} =
+  OxideApi.Oxql.fetch_timeseries(
     oxide,
     "get virtual_disk:bytes_read",
     project: "prod"
   )
 
-result
-|> OxideApi.Oxql.timeseries()
-|> Enum.each(fn series ->
+Enum.each(series, fn series ->
   IO.inspect(series["fields"])
   IO.inspect(series["points"])
 end)
@@ -299,6 +298,32 @@ Omit `:project` to use the fleet/system-scoped endpoint:
 
 if OxideApi.Oxql.empty?(result) do
   Logger.info("OxQL query returned no timeseries")
+end
+```
+
+For scripts, use `query!/3` to unwrap or raise:
+
+```elixir
+result = OxideApi.Oxql.query!(oxide, "get sled_cpu:usage")
+tables = OxideApi.Oxql.tables(result)
+```
+
+For agent loops, use `tagged_query/3` to combine OxQL with
+`OxideApi.Result` error categories:
+
+```elixir
+case OxideApi.Oxql.tagged_query(oxide, "get sled_cpu:usage") do
+  {:ok, result} ->
+    {:ok, OxideApi.Oxql.timeseries(result)}
+
+  {:error, category, error} when category in [:rate_limited, :retryable] ->
+    {:retry, error}
+
+  {:error, :transport_error, reason} ->
+    {:retry_transport, reason}
+
+  {:error, _category, error} ->
+    {:error, error}
 end
 ```
 

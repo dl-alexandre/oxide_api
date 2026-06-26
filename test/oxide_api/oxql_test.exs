@@ -48,6 +48,48 @@ defmodule OxideApi.OxqlTest do
     assert Oxql.empty?(result)
   end
 
+  test "can unwrap OxQL queries in scripts", %{bypass: bypass, client: client} do
+    Bypass.expect_once(bypass, "POST", "/v1/system/timeseries/query", fn conn ->
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+      assert Jason.decode!(body) == %{"query" => "get sled_cpu:usage"}
+
+      json(conn, 200, %{"tables" => []})
+    end)
+
+    assert %{"tables" => []} = Oxql.query!(client, "get sled_cpu:usage")
+  end
+
+  test "can tag OxQL errors for agent loops", %{bypass: bypass, client: client} do
+    Bypass.expect_once(bypass, "POST", "/v1/system/timeseries/query", fn conn ->
+      json(conn, 503, %{"message" => "service unavailable"})
+    end)
+
+    assert {:error, :retryable, %Error{status: 503}} =
+             Oxql.tagged_query(client, "get sled_cpu:usage")
+  end
+
+  test "can fetch tables and timeseries directly", %{bypass: bypass, client: client} do
+    Bypass.expect_once(bypass, "POST", "/v1/timeseries/query", fn conn ->
+      conn = Plug.Conn.fetch_query_params(conn)
+      assert conn.query_params["project"] == "prod"
+
+      json(conn, 200, oxql_result())
+    end)
+
+    assert {:ok, [%{"name" => "virtual_disk:bytes_read"}]} =
+             Oxql.fetch_tables(client, "get virtual_disk:bytes_read", project: "prod")
+
+    Bypass.expect_once(bypass, "POST", "/v1/timeseries/query", fn conn ->
+      conn = Plug.Conn.fetch_query_params(conn)
+      assert conn.query_params["project"] == "prod"
+
+      json(conn, 200, oxql_result())
+    end)
+
+    assert {:ok, [%{"points" => %{"timestamps" => ["2026-06-26T16:00:00Z"]}}]} =
+             Oxql.fetch_timeseries(client, "get virtual_disk:bytes_read", project: "prod")
+  end
+
   test "flattens timeseries from result tables" do
     assert [
              %{"fields" => %{"disk" => %{"type" => "string", "value" => "disk-a"}}}

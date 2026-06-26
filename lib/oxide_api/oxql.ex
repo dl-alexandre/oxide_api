@@ -7,9 +7,10 @@ defmodule OxideApi.Oxql do
   fleet/system scoped endpoint.
   """
 
-  alias OxideApi.{Client, Error}
+  alias OxideApi.{Client, Error, Result}
 
   @type query_result :: map()
+  @type tagged_result :: {:ok, query_result()} | {:error, Result.category(), term()}
 
   @doc """
   Runs an OxQL query.
@@ -27,6 +28,54 @@ defmodule OxideApi.Oxql do
     case Keyword.pop(opts, :project) do
       {nil, opts} -> system_query(client, query, opts)
       {project, opts} -> project_query(client, project, query, opts)
+    end
+  end
+
+  @doc """
+  Runs an OxQL query and raises on failure.
+
+  This is useful in scripts where a failed query should stop execution.
+  """
+  @spec query!(Client.t(), String.t(), keyword()) :: query_result()
+  def query!(%Client{} = client, query, opts \\ []) do
+    client
+    |> query(query, opts)
+    |> Result.unwrap!()
+  end
+
+  @doc """
+  Runs an OxQL query and tags errors with `OxideApi.Result.category/1`.
+
+  Successful queries return `{:ok, result}`. Failures return
+  `{:error, category, reason}`, where category is one of the values documented
+  by `OxideApi.Result`.
+  """
+  @spec tagged_query(Client.t(), String.t(), keyword()) :: tagged_result()
+  def tagged_query(%Client{} = client, query, opts \\ []) do
+    client
+    |> query(query, opts)
+    |> Result.tagged()
+  end
+
+  @doc """
+  Runs an OxQL query and returns only result tables.
+  """
+  @spec fetch_tables(Client.t(), String.t(), keyword()) :: {:ok, [map()]} | {:error, term()}
+  def fetch_tables(%Client{} = client, query, opts \\ []) do
+    case query(client, query, opts) do
+      {:ok, result} -> {:ok, tables(result)}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @doc """
+  Runs an OxQL query and returns every timeseries across every result table.
+  """
+  @spec fetch_timeseries(Client.t(), String.t(), keyword()) :: {:ok, [map()]} | {:error, term()}
+  def fetch_timeseries(%Client{} = client, query, opts \\ []) do
+    case query(client, query, opts) do
+      {:ok, result} -> {:ok, timeseries(result)}
+      {:error, reason} -> {:error, reason}
     end
   end
 

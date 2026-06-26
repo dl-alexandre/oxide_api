@@ -15,7 +15,7 @@ opts =
 
 {:ok, oxide} = OxideApi.new()
 
-case OxideApi.Oxql.query(oxide, query, opts) do
+case OxideApi.Oxql.tagged_query(oxide, query, opts) do
   {:ok, result} ->
     result
     |> OxideApi.Oxql.tables()
@@ -24,11 +24,19 @@ case OxideApi.Oxql.query(oxide, query, opts) do
       IO.puts("#{table["name"]}: #{count} timeseries")
     end)
 
-  {:error, %OxideApi.Error{} = error} ->
-    IO.puts(Exception.message(error))
+  {:error, category, %OxideApi.Error{} = error} when category in [:rate_limited, :retryable] ->
+    IO.puts("Retryable OxQL error: #{Exception.message(error)}")
+    System.halt(75)
+
+  {:error, category, %OxideApi.Error{} = error} ->
+    IO.puts("OxQL #{category}: #{Exception.message(error)}")
     System.halt(1)
 
-  {:error, {:transport_error, reason}} ->
+  {:error, :transport_error, reason} ->
     IO.puts("Transport error: #{inspect(reason)}")
+    System.halt(75)
+
+  {:error, category, reason} ->
+    IO.puts("OxQL #{category}: #{inspect(reason)}")
     System.halt(1)
 end

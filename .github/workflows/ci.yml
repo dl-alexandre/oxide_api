@@ -31,9 +31,9 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+          key: ${{ runner.os }}-mix-${{ matrix.optional-deps }}-${{ hashFiles('mix.lock') }}
           restore-keys: |
-            ${{ runner.os }}-mix-
+            ${{ runner.os }}-mix-${{ matrix.optional-deps }}-
 
       - name: Install dependencies
         run: mix deps.get
@@ -46,7 +46,7 @@ jobs:
         if: matrix.optional-deps == 'none'
         run: |
           mix format --check-formatted
-          mix compile --no-optional-deps --warnings-as-errors
+          MIX_ENV=test mix compile --no-optional-deps --warnings-as-errors
           mix test --no-compile
 
       - name: Schema coverage

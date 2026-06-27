@@ -124,6 +124,112 @@ Request behavior can be tuned with `Req` options when the client is built:
   )
 ```
 
+## Supervised Clients
+
+For OTP applications, start the Oxide supervision tree and create clients
+dynamically by application boundary:
+
+```elixir
+children = [
+  {OxideApi.Supervisor, []}
+]
+```
+
+```elixir
+{:ok, _pid} =
+  OxideApi.start_project_client("prod",
+    host: "https://my-oxide-rack.com",
+    token: "oxide-abc123"
+  )
+
+{:ok, oxide} = OxideApi.fetch_client({:project, "prod"})
+{:ok, page} = OxideApi.list_instances(oxide, project: "prod")
+```
+
+Use `start_client/2` for arbitrary IDs, `start_project_client/2` for
+project-scoped lifecycle, and `start_silo_client/2` for silo-scoped lifecycle.
+Each managed client is a supervised process registered by ID; fetching the
+client returns the immutable `%OxideApi.Client{}` so concurrent API calls run in
+the caller process rather than being serialized through the manager.
+
+Applications with more than one Oxide supervision tree should provide explicit
+names:
+
+```elixir
+children = [
+  {OxideApi.Supervisor,
+   name: MyApp.OxideSupervisor,
+   registry: MyApp.OxideRegistry,
+   client_supervisor: MyApp.OxideClientSupervisor}
+]
+```
+
+Then pass the same `:registry` and `:client_supervisor` options when starting or
+fetching dynamic clients.
+
+For a single named long-running client, use `OxideApi.ManagedClient` directly in
+your supervision tree:
+
+```elixir
+children = [
+  {OxideApi.ManagedClient,
+   id: :system,
+   name: MyApp.OxideClient,
+   host: "https://my-oxide-rack.com",
+   token: "oxide-abc123"}
+]
+
+oxide = OxideApi.ManagedClient.client(MyApp.OxideClient)
+```
+
+## Telemetry
+
+The client emits `:telemetry` events for requests, retries, workflows, waits,
+and cache activity:
+
+```elixir
+:telemetry.attach_many(
+  "oxide-api-logger",
+  [
+    [:oxide_api, :request, :stop],
+    [:oxide_api, :request, :retry],
+    [:oxide_api, :workflow, :stop],
+    [:oxide_api, :wait, :state_change],
+    [:oxide_api, :cache, :hit],
+    [:oxide_api, :cache, :miss]
+  ],
+  fn event, measurements, metadata, _config ->
+    Logger.info("oxide event=#{inspect(event)} metadata=#{inspect(metadata)}")
+  end,
+  nil
+)
+```
+
+Request stop metadata includes `:method`, `:path`, `:host`, `:result`, and, when
+available, `:status`, `:request_id`, `:error_code`, and `:error_category`.
+Durations are emitted in native time units.
+
+## Read-Through Cache
+
+Start a cache when read-heavy workflows need short-lived reuse:
+
+```elixir
+children = [
+  {OxideApi.Cache, name: MyApp.OxideCache, table: MyApp.OxideCache}
+]
+
+{:ok, projects} =
+  OxideApi.Cache.fetch(MyApp.OxideCache, {:projects, "prod"}, 30_000, fn ->
+    OxideApi.fetch_all(oxide, :project_list)
+  end)
+```
+
+The cache is explicit and ETS-backed. Callers choose keys and TTLs; writes and
+mutating workflow helpers do not invalidate cache entries automatically.
+Use `OxideApi.Cache.namespace/1`, `OxideApi.Cache.key/2`, and
+`OxideApi.Cache.invalidate_namespace/2` when a workflow needs to expire a group
+of related read-through entries after a write.
+
 ## Basic Requests
 
 List projects:
@@ -238,6 +344,34 @@ OxideApi.stream_projects(oxide, limit: 100)
 OxideApi.stream_instances(oxide, project: "myproj")
 OxideApi.stream_disks(oxide, project: "myproj")
 ```
+
+For long-running state transitions, use `OxideApi.Wait`:
+
+```elixir
+{:ok, instance} =
+  OxideApi.wait_instance_running(oxide, "web",
+    project: "prod",
+    interval: 1_000,
+    timeout: 120_000
+  )
+```
+
+The generic wait helpers accept any fetch function:
+
+```elixir
+fetch = fn -> OxideApi.Instances.get(oxide, "web", project: "prod") end
+
+OxideApi.Wait.changes(fetch, "run_state", interval: 1_000)
+|> Enum.each(fn {previous, current, instance} ->
+  IO.inspect({previous, current, instance["name"]})
+end)
+```
+
+Use `OxideApi.wait_until_change/3` or `OxideApi.Wait.until_change/3` when a
+long-polling task only needs the first observed state change.
+
+Pass `:on_change` for callback-style coordination, or `:pubsub` and `:topic` to
+broadcast state changes through `Phoenix.PubSub` when Phoenix is available.
 
 Streams are lazy. API errors raise `%OxideApi.Error{}` while the stream is
 being consumed, so wrap the consuming operation when you need to recover:
@@ -420,6 +554,44 @@ Create an image from a snapshot:
   )
 ```
 
+Ensure a disk or instance exists:
+
+```elixir
+{:ok, disk} =
+  OxideApi.Workflows.ensure_disk(oxide, "prod",
+    name: "data",
+    size: 21_474_836_480
+  )
+
+{:ok, instance} =
+  OxideApi.Workflows.ensure_instance(oxide, "prod",
+    name: "web",
+    hostname: "web-1",
+    ncpus: 2,
+    memory: 4_294_967_296
+  )
+```
+
+Ensure image, floating-IP, and firewall-rule state:
+
+```elixir
+{:ok, image} =
+  OxideApi.Workflows.ensure_image_from_snapshot(
+    oxide,
+    "prod",
+    "ubuntu-24-04",
+    "b6f0f51b-1a7e-4f12-9057-3e16c8f7b68d",
+    os: "ubuntu",
+    version: "24.04"
+  )
+
+{:ok, floating_ip} =
+  OxideApi.Workflows.ensure_floating_ip(oxide, "prod", name: "web-public")
+
+{:ok, firewall_rules} =
+  OxideApi.Workflows.ensure_vpc_firewall_rules(oxide, "prod", "app", [rule])
+```
+
 Workflow helpers are thin sequential composition functions, not transactions.
 They stop at the first `{:error, reason}` and return that error without
 attempting rollback. The `ensure_*` helpers first try to fetch existing
@@ -465,6 +637,88 @@ rule =
 All builders return plain maps, and every create/update wrapper still accepts a
 raw map. That keeps new Oxide API fields usable before this library grows a
 dedicated convenience helper.
+
+## Background Jobs
+
+`OxideApi.Job` provides Oban-friendly helpers for common async work. Add Oban to
+the host application when you want real workers:
+
+```elixir
+def deps do
+  [
+    {:oxide_api, "~> 0.0.1"},
+    {:oban, "~> 2.23"}
+  ]
+end
+```
+
+Workers store IDs and JSON-safe maps, not client structs. Start a supervised
+client with a JSON-safe ID, then enqueue jobs:
+
+```elixir
+{:ok, _pid} =
+  OxideApi.start_project_client("prod",
+    host: "https://my-oxide-rack.com",
+    token: "oxide-abc123"
+  )
+
+changeset =
+  OxideApi.Job.provision_instance(%{
+    client_id: "prod",
+    project: "prod",
+    instance: %{name: "web", hostname: "web-1", ncpus: 2, memory: 4_294_967_296},
+    disk: %{name: "boot", size: 21_474_836_480},
+    wait_until: "running",
+    interval: 1_000,
+    timeout: 120_000
+  })
+
+Oban.insert(changeset)
+```
+
+Available workers cover instance provisioning, waiting for instance state, and
+generated operation-ID requests. `OxideApi.Job.bulk/3` builds batches of Oban
+changesets for bulk insertion. The convenience bulk builders
+`provision_instances/4`, `wait_for_instances/5`, and `request_operations/3`
+share common client/project arguments across many jobs:
+
+```elixir
+jobs =
+  OxideApi.Job.wait_for_instances(
+    "prod",
+    "prod",
+    ["web-1", "web-2"],
+    "running",
+    interval: 1_000,
+    timeout: 120_000
+  )
+
+Oban.insert_all(jobs)
+```
+
+## Ash Integration
+
+The optional Ash layer exposes data-layer-less resources for common Oxide
+objects. Add Ash in the host application to use the declarative domain:
+
+```elixir
+def deps do
+  [
+    {:oxide_api, "~> 0.0.1"},
+    {:ash, "~> 3.29"}
+  ]
+end
+```
+
+```elixir
+{:ok, projects} = OxideApi.Ash.Domain.list_projects(oxide)
+{:ok, instance} = OxideApi.Ash.Domain.get_instance(oxide, "prod", "web")
+```
+
+The resource modules also provide `from_api/1` mappers, so API maps can be
+converted into `%OxideApi.Ash.Project{}`, `%OxideApi.Ash.Instance{}`, and
+`%OxideApi.Ash.Disk{}`, `%OxideApi.Ash.Image{}`, and
+`%OxideApi.Ash.FloatingIp{}` structs even in non-Ash applications.
 
 ## Error Handling
 
@@ -618,6 +872,9 @@ Run the standard local checks:
 mix verify
 ```
 
+CI also runs a no-optional-dependency matrix that compiles and tests without
+Ash or Oban, so the core SDK stays usable in lightweight applications.
+
 Optional checks:
 
 ```sh
@@ -636,3 +893,7 @@ The `examples/` directory contains small runnable scripts:
   storage.
 - `examples/common_workflows.exs` - project/VPC/subnet workflow helpers.
 - `examples/oxql_query.exs` - project or system OxQL query execution.
+- `examples/supervised_clients.exs` - dynamic per-project supervised clients.
+- `examples/wait_for_instance.exs` - long-polling and change callbacks.
+- `examples/oban_jobs.exs` - background job changesets for Oban.
+- `examples/ash_resources.exs` - Ash domain and resource mapping.

@@ -3,7 +3,7 @@ defmodule OxideApi.Client do
   Low-level HTTP client for the Oxide API.
   """
 
-  alias OxideApi.{Config, Error, Response}
+  alias OxideApi.{Config, Error, Response, Telemetry}
 
   @api_version "2026060800.0.0"
 
@@ -147,21 +147,29 @@ defmodule OxideApi.Client do
   """
   @spec request_with_meta(t(), atom(), String.t(), keyword()) :: response_result()
   def request_with_meta(%__MODULE__{} = client, method, path, opts \\ []) do
-    {request_opts, opts} = Keyword.split(opts, [:params, :json, :form, :body])
-    {extra_headers, opts} = Keyword.pop(opts, :headers, [])
-    {req_options, _opts} = Keyword.pop(opts, :req_options, [])
+    metadata = Telemetry.request_metadata(client, method, path)
 
-    req =
-      Req.new(
-        base_url: client.host,
-        headers: headers(client, extra_headers)
-      )
-      |> Req.merge(client.req_options)
-      |> Req.merge(req_options)
+    Telemetry.span([:oxide_api, :request], metadata, fn ->
+      {request_opts, opts} = Keyword.split(opts, [:params, :json, :form, :body])
+      {extra_headers, opts} = Keyword.pop(opts, :headers, [])
+      {req_options, _opts} = Keyword.pop(opts, :req_options, [])
 
-    req
-    |> Req.request([method: method, url: path] ++ request_opts)
-    |> normalize_with_meta()
+      req_options =
+        client.req_options
+        |> Keyword.merge(req_options)
+        |> Telemetry.instrument_req_options(metadata)
+
+      req =
+        Req.new(
+          base_url: client.host,
+          headers: headers(client, extra_headers)
+        )
+        |> Req.merge(req_options)
+
+      req
+      |> Req.request([method: method, url: path] ++ request_opts)
+      |> normalize_with_meta()
+    end)
   end
 
   @doc """

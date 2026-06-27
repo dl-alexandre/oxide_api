@@ -48,6 +48,36 @@ defmodule OxideApi do
   defdelegate new!(opts \\ []), to: Client
 
   @doc """
+  Starts a dynamically supervised client under `OxideApi.Supervisor`.
+  """
+  @spec start_client(term(), keyword()) :: DynamicSupervisor.on_start_child()
+  defdelegate start_client(id, opts \\ []), to: OxideApi.Supervisor
+
+  @doc """
+  Starts a dynamically supervised client scoped to an Oxide project.
+  """
+  @spec start_project_client(String.t(), keyword()) :: DynamicSupervisor.on_start_child()
+  defdelegate start_project_client(project, opts \\ []), to: OxideApi.Supervisor
+
+  @doc """
+  Starts a dynamically supervised client scoped to an Oxide silo.
+  """
+  @spec start_silo_client(String.t(), keyword()) :: DynamicSupervisor.on_start_child()
+  defdelegate start_silo_client(silo, opts \\ []), to: OxideApi.Supervisor
+
+  @doc """
+  Fetches a supervised client by ID.
+  """
+  @spec fetch_client(term(), keyword()) :: {:ok, Client.t()} | {:error, :not_found}
+  defdelegate fetch_client(id, opts \\ []), to: OxideApi.Supervisor, as: :client
+
+  @doc """
+  Stops a dynamically supervised client by ID.
+  """
+  @spec stop_client(term(), keyword()) :: :ok | {:error, :not_found}
+  defdelegate stop_client(id, opts \\ []), to: OxideApi.Supervisor
+
+  @doc """
   Makes a raw request against the Oxide API.
   """
   @spec request(Client.t(), atom(), String.t(), keyword()) ::
@@ -112,6 +142,49 @@ defmodule OxideApi do
   @spec fetch_all(Client.t(), String.t() | atom(), keyword() | map()) ::
           {:ok, [term()]} | {:error, term()}
   defdelegate fetch_all(client, operation_or_path, opts \\ []), to: Operation
+
+  @doc """
+  Polls a fetch function until a predicate returns true.
+  """
+  @spec wait_until((-> Client.result()), (term() -> boolean()), keyword()) ::
+          {:ok, term()} | {:error, term()}
+  defdelegate wait_until(fetch_fun, predicate, opts \\ []), to: OxideApi.Wait, as: :until
+
+  @doc """
+  Polls a fetch function until a resource state reaches the desired value.
+  """
+  @spec wait_until_state(OxideApi.Wait.fetch_fun(), OxideApi.Wait.state_path(), term(), keyword()) ::
+          {:ok, term()} | {:error, term()}
+  defdelegate wait_until_state(fetch_fun, path, desired, opts \\ []),
+    to: OxideApi.Wait,
+    as: :until_state
+
+  @doc """
+  Polls a fetch function until a resource state changes from its initial value.
+  """
+  @spec wait_until_change(OxideApi.Wait.fetch_fun(), OxideApi.Wait.state_path(), keyword()) ::
+          {:ok, term()} | {:error, term()}
+  defdelegate wait_until_change(fetch_fun, path, opts \\ []),
+    to: OxideApi.Wait,
+    as: :until_change
+
+  @doc """
+  Waits for an instance to reach `running`.
+  """
+  @spec wait_instance_running(Client.t(), String.t(), keyword()) ::
+          {:ok, term()} | {:error, term()}
+  defdelegate wait_instance_running(client, instance, opts \\ []),
+    to: OxideApi.Wait,
+    as: :instance_running
+
+  @doc """
+  Waits for an instance to reach `stopped`.
+  """
+  @spec wait_instance_stopped(Client.t(), String.t(), keyword()) ::
+          {:ok, term()} | {:error, term()}
+  defdelegate wait_instance_stopped(client, instance, opts \\ []),
+    to: OxideApi.Wait,
+    as: :instance_stopped
 
   @doc """
   Runs an OxQL timeseries query.

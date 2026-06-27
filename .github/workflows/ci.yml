@@ -10,6 +10,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        optional-deps:
+          - full
+          - none
 
     steps:
       - uses: actions/checkout@v4
@@ -25,15 +31,24 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+          key: ${{ runner.os }}-mix-${{ matrix.optional-deps }}-${{ hashFiles('mix.lock') }}
           restore-keys: |
-            ${{ runner.os }}-mix-
+            ${{ runner.os }}-mix-${{ matrix.optional-deps }}-
 
       - name: Install dependencies
         run: mix deps.get
 
-      - name: Verify
+      - name: Verify full dependency set
+        if: matrix.optional-deps == 'full'
         run: mix verify
 
+      - name: Verify without optional dependencies
+        if: matrix.optional-deps == 'none'
+        run: |
+          mix format --check-formatted
+          MIX_ENV=test mix compile --no-optional-deps --warnings-as-errors
+          mix test --no-compile
+
       - name: Schema coverage
+        if: matrix.optional-deps == 'full'
         run: mix oxide_api.schema
